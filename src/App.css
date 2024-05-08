@@ -1,38 +1,101 @@
 .App {
-  text-align: center;
-}
-
-.App-logo {
-  height: 40vmin;
-  pointer-events: none;
-}
-
-@media (prefers-reduced-motion: no-preference) {
-  .App-logo {
-    animation: App-logo-spin infinite 20s linear;
-  }
-}
-
-.App-header {
-  background-color: #282c34;
-  min-height: 100vh;
+  width: 100%;
+  height: 100%;
   display: flex;
   flex-direction: column;
-  align-items: center;
-  justify-content: center;
-  font-size: calc(10px + 2vmin);
+  align-content: stretch;
+}
+
+.App h1 {
+}
+
+.content {
+  flex: 1;
+  position: relative;
+  display: flex;
+}
+
+.content .wrapper {
+  position: relative;
+  flex: 1;
+  padding: 0 20px;
+  margin-right: 10px;
+}
+
+.videos {
+  position: absolute;
+  overflow-y: auto;
+  height: 100%;
+  width: 100%;
+}
+
+.player {
+  flex: 2;
+  padding: 0 40px;
+}
+
+.yt-card {
+  background: #e0e0e0;
+  border: 1px solid #d5d5d5;
+  width: 500px;
+  padding: 20px;
+  display: flex;
+  border-radius: 6px;
+  margin-bottom: 10px;
+  cursor: pointer;
+}
+
+.yt-card.selected {
+  background: #f0f0f0;
+}
+
+.left, .right {
+  flex: 1;
+  position: relative;
+}
+
+.yt-card img {
+  width: 100%;
+  position: relative;
+  overflow: hidden;
+  aspect-ratio: 16/9;
+  background-position: center;
+  background-size: cover;
+  object-fit: cover;
+}
+
+.yt-card h2 {
+  font-size: 1rem;
+  margin: 0;
+  padding: 0;
+  margin-left: 20px;
+}
+
+.yt-card .stats {
+  position: absolute;
+  right: 2px;
+  bottom: 10px;
+}
+
+.yt-card .stats span {
+  background: #333333;
   color: white;
+  font-size: .7rem;
+  padding: 2px;
+  border-radius: 2px;
+  margin-right: 2px;
 }
 
-.App-link {
-  color: #61dafb;
+.transcript {
+  font-size: 2rem;
 }
 
-@keyframes App-logo-spin {
-  from {
-    transform: rotate(0deg);
-  }
-  to {
-    transform: rotate(360deg);
-  }
+.transcript .actual {
+  color: #254c67;
+  font-weight: bold;
+}
+
+
+.transcript .previous, .transcript .next {
+  color: #3b3b3b;
 }
