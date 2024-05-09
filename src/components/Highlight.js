@@ -2,10 +2,11 @@ function Highlight(props) {
   const {
     action,
     description,
+    active,
   } = props;
 
   return (
-    <div onClick={action()}>
+    <div className={active ? "transcript active": "transcript"} onClick={action()}>
       {description}
     </div>
   );

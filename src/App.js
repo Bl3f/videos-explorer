@@ -3,8 +3,11 @@ import {useEffect, useRef, useState} from "react";
 import Player from "./components/Player";
 import DuckDBClient from "./utils/DuckDB";
 import { LuLoader } from "react-icons/lu";
+import {ADMIN_MODE, HIGHLIGHTS_MODE, SEARCH_MODE} from "./consts";
+
 
 function App() {
+  const [mode, setMode] = useState(SEARCH_MODE);
   const [videos, setVideos] = useState({});
   const [state, setState] = useState({loading: true, ready: false});
   const [selectedVideo, setSelectedVideo] = useState(null);
@@ -25,6 +28,9 @@ function App() {
   const [resultPage, setResultPage] = useState(0);
   const [db, setDB] = useState(null);
   const [client, setClient] = useState(new DuckDBClient());
+
+  //Highlights main state
+  const [highlights, setHighlights] = useState(window.localStorage.getItem("highlights") ? JSON.parse(window.localStorage.getItem("highlights")) : {});
 
   const worker = useRef(null);
 
@@ -144,6 +150,7 @@ function App() {
   }
 
   const search = async () => {
+    setMode(SEARCH_MODE);
     setState({...state, ready: false});
     const results = await client.query(`
       WITH raw_events AS (
@@ -194,11 +201,18 @@ function App() {
     setState({...state, ready: true});
   }
 
+  const handleHighlightsCreation = (highlight) => {
+    const previousValue = (highlight.video_id in highlights) ? highlights[highlight.video_id] : [];
+    setHighlights({...highlights, [highlight.video_id]: [...previousValue, highlight]});
+    window.localStorage.setItem("highlights", JSON.stringify({...highlights, [highlight.video_id]: [...previousValue, highlight]}));
+  }
+
   return (
     <div className="App">
       <header>
         <h1>Data Council 2024</h1>
-        <h2>Highlights <span className="subtitle">unofficial (by blef and juhache)</span></h2>
+        <h2><span onClick={() => setMode(ADMIN_MODE)}>Highlights</span> <span className="subtitle">unofficial (by blef and juhache)</span></h2>
+        {ADMIN_MODE === mode ? <pre>admin mode</pre> : ''}
       </header>
       <div className="content">
         <div className="summary">In this app you can search for concepts or watch highlights we handpicked in the 80 data councils videos. Data Council highlights is an application designed and developed by blef and juhache. This is not affiliated to the Data Council.</div>
@@ -214,11 +228,12 @@ function App() {
             onKeyDown={(e) => {if(e.key === 'Enter') search()}}
           />
           <input type="button" disabled={state.ready ? '' : 'disabled'} onClick={search} value="search"/>
+          <div><span style={{marginRight: '10px'}}>•</span><input type="button" disabled={state.ready ? '' : 'disabled'} onClick={() => setMode(HIGHLIGHTS_MODE)} value="watch highlights"/></div>
         </div>
-        : ''}
+          : ''}
         <div className="wrapper">
           <div className="results">
-            {queryResults.values.map((result) => (
+            {mode === SEARCH_MODE && queryResults.values.map((result) => (
               <div
                 className={`video ${selectedVideo && selectedVideo.id === result.video_id ? 'selected' : ''}`}
                 key={result.video_id}
@@ -231,6 +246,18 @@ function App() {
                 </div>
               </div>
             ))}
+            {mode === ADMIN_MODE && Object.entries(videos).map(([videoId, video]) => (
+              <div
+                className={`video ${selectedVideo && selectedVideo.id === video.id ? 'selected' : ''}`}
+                key={video.id}
+                onClick={() => setSelectedVideo(video)}
+              >
+                <img src={video.thumbnail} alt=""/>
+                <div className="details">
+                  <div className="title">{video.title}</div>
+                </div>
+              </div>
+            ))}
           </div>
           <div className="player" style={{display: `${selectedVideo ? 'block' : 'none'}`}}>
             {
@@ -239,6 +266,9 @@ function App() {
                 key={`player-${selectedVideo.id}`}
                 video={selectedVideo}
                 segments={queryResults.values ? queryResults.values.find((item) => item.video_id === selectedVideo.id) : []}
+                mode={mode}
+                setHighlights={handleHighlightsCreation}
+                highlights={highlights[selectedVideo.id]}
               />
               : ""
             }

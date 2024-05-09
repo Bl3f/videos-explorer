@@ -69,19 +69,20 @@ header {
   border-radius: 4px;
   padding: 4px 8px;
   color: var(--main-color);
+  margin-right: 10px;
 }
 
-.content .search input[type=button] {
+input[type=button] {
   height: 40px;
   background: var(--main-color);
   color: white;
   border: none;
   border-radius: 4px;
   padding: 4px 14px;
-  margin-left: 10px;
+  margin-right: 10px;
 }
 
-.content .search input[type=button]:hover {
+input[type=button]:hover {
   cursor: pointer;
   background: #116eb9;
 }
@@ -180,15 +181,24 @@ header {
   border-radius: var(--timeline-radius);
   top: -4px;
   cursor: pointer;
-  background: #ff7675;
+  background: rgba(255, 118, 117, 0.7);
   min-width: 6px;
   border-left: #74b9ff 2px solid;
   border-right: #74b9ff 2px solid;
 }
 
+.segments.highlight {
+  background: rgba(253, 203, 110, .7);
+}
+
+.segments.highlight:hover {
+  background: rgba(253, 203, 110, 1);
+}
+
 .segments:hover {
   height: 12px;
   top: -6px;
+  background: rgba(255, 118, 117, 1);
 }
 
 .buttons {
@@ -208,4 +218,12 @@ header {
 .playbackRate {
   margin-left: auto;
   cursor: pointer;
+}
+
+.admin {
+  margin-top: 20px;
+}
+
+.transcript.active {
+  font-weight: bold;
 }
