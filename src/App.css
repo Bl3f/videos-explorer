@@ -2,6 +2,7 @@
   --main-size: 1600px;
   --main-bg-color: #81ecec;
   --main-color: #0984e3;
+  --timeline-radius: 0px;
 }
 
 .App {
@@ -32,6 +33,11 @@
 .App header .subtitle {
   font-size: .8rem;
   font-style: italic;
+}
+
+.App .summary {
+  width: 600px;
+  margin: 0px 0 20px 0;
 }
 
 header {
@@ -138,7 +144,7 @@ header {
 }
 
 .controls {
-  margin-top: 10px;
+  margin-top: 14px;
 }
 
 .timeline {
@@ -148,7 +154,7 @@ header {
 }
 
 .timeline .firstground {
-  border-radius: 4px;
+  border-radius: var(--timeline-radius);
   height: 8px;
   background: #2d3436;
   position: absolute;
@@ -158,9 +164,9 @@ header {
 
 .timeline .background {
   height: 8px;
-  border-radius: 4px;
+  border-radius: var(--timeline-radius);
   width: 100%;
-  background: #dfe6e9;
+  background: #b2bec3;
   position: absolute;
   top: -4px;
   cursor: pointer;
@@ -169,11 +175,18 @@ header {
 .segments {
   position: absolute;
   height: 8px;
-  border-radius: 4px;
+  border-radius: var(--timeline-radius);
   top: -4px;
   cursor: pointer;
   background: #ff7675;
   min-width: 6px;
+  border-left: #74b9ff 2px solid;
+  border-right: #74b9ff 2px solid;
+}
+
+.segments:hover {
+  height: 12px;
+  top: -6px;
 }
 
 .buttons {
@@ -185,7 +198,12 @@ header {
   cursor: pointer;
 }
 
-.duration, .dynamicTitle {
+.duration, .dynamicTitle, .playbackRate {
   margin-left: 10px;
   font-size: .8rem;
+}
+
+.playbackRate {
+  margin-left: auto;
+  cursor: pointer;
 }

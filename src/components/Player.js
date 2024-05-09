@@ -37,6 +37,7 @@ function Player(props) {
   const backgroundRef = React.useRef(null);
   const [playing, setPlaying] = React.useState(false);
   const [progress, setProgress] = React.useState({});
+  const [playbackRate, setplaybackRate] = React.useState(1);
   const [duration, setDuration] = React.useState('00:00');
   const [dynamicTitle, setDynamicTitle] = React.useState('');
 
@@ -74,9 +75,10 @@ function Player(props) {
           className='react-player'
           url={`https://www.youtube.com/watch?v=${video.id}`}
           width='100%'
+          playing={playing}
+          playbackRate={playbackRate}
           onProgress={setProgress}
           onDuration={setDuration}
-          playing={playing}
           onPlay={() => setPlaying(true)}
           onPause={() => setPlaying(false)}
         />
@@ -96,7 +98,7 @@ function Player(props) {
                   className="segments"
                   onMouseMove={(e) => handleSegmentHover(e, session.session_id)}
                   onMouseLeave={() => setDynamicTitle('')}
-                  onClick={() => playerRef.current.seekTo(session.start) && setPlaying(true)}
+                  onClick={() => {playerRef.current.seekTo(session.start); setPlaying(true);}}
                   style={{left: `${start}px`, width: `${end - start}px`, }}
                 ></div>
               );
@@ -109,6 +111,7 @@ function Player(props) {
           <div onClick={() => setPlaying(!playing)}>{playing ? <FaPause className="video-control" /> : <FaPlay className="video-control" />}</div>
           <div className="duration">{fancyTimeFormat(progress.playedSeconds)} / {fancyTimeFormat(duration)}</div>
           <div className="dynamicTitle">{dynamicTitle ? `• Segment n°${dynamicTitle}` : ''}</div>
+          <div className="playbackRate" onClick={() => setplaybackRate(Math.max(1, (playbackRate + .25) % 2.25))}>x{playbackRate}</div>
         </div>
       </div>
     </div>

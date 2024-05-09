@@ -2,14 +2,14 @@ import './App.css';
 import {useEffect, useRef, useState} from "react";
 import Player from "./components/Player";
 import DuckDBClient from "./utils/DuckDB";
+import { LuLoader } from "react-icons/lu";
 
 function App() {
   const [videos, setVideos] = useState({});
-  const [loading, setLoading] = useState(true);
+  const [state, setState] = useState({loading: true, ready: false});
   const [selectedVideo, setSelectedVideo] = useState(null);
 
   // Model loading
-  const [ready, setReady] = useState(false);
   const [disabled, setDisabled] = useState(false);
   const [progressItems, setProgressItems] = useState([]);
 
@@ -28,24 +28,23 @@ function App() {
   const worker = useRef(null);
 
   useEffect(() => {
-    fetch("http://localhost:8000/videos.json")
+    fetch("https://storage.googleapis.com/videos-explorer/videos.json")
       .then((response) => response.json())
       .then((data) => Object.fromEntries((new Map(data.map((video) => [video.id, video])))))
-      .then((data) => setVideos(data))
-      .then(() => setLoading(false));
+      .then((data) => setVideos(data));
   }, []);
 
   const connectAndGetVersion = async () => {
-    setReady(false);
+    setState({...state, ready: false});
     const version = await client.version();
     const db = await client.db();
     setVersion(version);
     setDB(db);
-    await client.query(`CREATE TABLE IF NOT EXISTS segments AS FROM read_parquet('http://localhost:8000/segments.parquet');`)
+    await client.query(`CREATE TABLE IF NOT EXISTS segments AS (SELECT video_id, id, row_id, start, "end", text FROM read_parquet('https://storage.googleapis.com/videos-explorer/segments.parquet'));`)
     await client.query("INSTALL fts;");
     await client.query("LOAD fts;");
     await client.query("PRAGMA create_fts_index('segments', 'row_id', 'text', overwrite=1)");
-    setReady(true);
+    setState({loading: false, ready: true});
   }
 
   useEffect(() => {
@@ -65,7 +64,7 @@ function App() {
       switch (e.data.status) {
         case 'initiate':
           // Model file start load: add a new progress item to the list.
-          setReady(false);
+          setState({...state, ready: false});
           setProgressItems(prev => [...prev, e.data]);
           break;
 
@@ -90,7 +89,7 @@ function App() {
 
         case 'ready':
           // Pipeline ready: the worker is ready to accept messages.
-          setReady(true);
+          setState({...state, ready: true});
           break;
 
         case 'update':
@@ -144,7 +143,7 @@ function App() {
   }
 
   const search = async () => {
-    setReady(false)
+    setState({...state, ready: false});
     const results = await client.query(`
       WITH raw_events AS (
         SELECT
@@ -191,7 +190,7 @@ function App() {
       ORDER BY nb DESC
     `);
     setQueryResults(results);
-    setReady(true);
+    setState({...state, ready: true});
   }
 
   return (
@@ -201,17 +200,21 @@ function App() {
         <h2>Highlights <span className="subtitle">unofficial (by blef and juhache)</span></h2>
       </header>
       <div className="content">
+        <div className="summary">In this app you can search for concepts or watch highlights we handpicked in the 80 data councils videos. Data Council highlights is an application designed and developed by blef and juhache. This is not affiliated to the Data Council.</div>
+        {state.loading ? "App is initializing..." : ""}
+        {!state.loading  ?
         <div className="search">
           <input
             type="text"
             value={input}
             placeholder={"Search for a concept"}
-            disabled={ready ? '' : 'disabled'}
+            disabled={state.ready ? '' : 'disabled'}
             onChange={(e) => setInput(e.target.value)}
             onKeyDown={(e) => {if(e.key === 'Enter') search()}}
           />
-          <input type="button" disabled={ready ? '' : 'disabled'} onClick={search} value="search"/>
+          <input type="button" disabled={state.ready ? '' : 'disabled'} onClick={search} value="search"/>
         </div>
+        : ''}
         <div className="wrapper">
           <div className="results">
             {queryResults.values.map((result) => (
