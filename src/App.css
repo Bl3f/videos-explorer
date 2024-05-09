@@ -89,6 +89,8 @@ header {
 .wrapper {
   height: 100%;
   display: flex;
+  flex: 1;
+  min-height: 0;
 }
 
 .results {

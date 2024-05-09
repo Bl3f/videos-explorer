@@ -22,6 +22,7 @@ function App() {
   const [isRunning, setIsRunning] = useState(false);
   const [error, setError] = useState(null);
   const [queryResults, setQueryResults] = useState({headers: [], values: []});
+  const [resultPage, setResultPage] = useState(0);
   const [db, setDB] = useState(null);
   const [client, setClient] = useState(new DuckDBClient());
 
