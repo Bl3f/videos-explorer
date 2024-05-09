@@ -1,6 +1,8 @@
-import React, {useCallback, useEffect, useLayoutEffect, useRef, useState} from "react";
-import YouTube from 'react-youtube';
+import React from "react";
 import Highlight from "./Highlight";
+import ReactPlayer from 'react-player/youtube';
+import { FaPause, FaPlay } from "react-icons/fa";
+
 
 const allHighlights = {
   cylAr9oUluI: [
@@ -9,105 +11,108 @@ const allHighlights = {
   ],
 }
 
-class Player extends React.Component {
-  constructor(props) {
-    super(props);
-    this.state = {
-      player: null,
-      timecode: null,
-      transcript: {segments: []},
-      visible: {actual: null, previous: [], next: []},
-    };
+function fancyTimeFormat(duration) {
+  // Hours, minutes and seconds
+  const hrs = ~~(duration / 3600);
+  const mins = ~~((duration % 3600) / 60);
+  const secs = ~~duration % 60;
+
+  // Output like "1:01" or "4:03:59" or "123:03:59"
+  let ret = "";
+
+  if (hrs > 0) {
+    ret += "" + hrs + ":" + (mins < 10 ? "0" : "");
   }
 
-  onPlay = (event) => {
-    console.log('Playing video');
-    this.interval = setInterval(() => {
-      const timecode = event.target.getCurrentTime();
-      this.setState({timecode});
-      this.setVisibleSegments(timecode);
-    }, 400)
+  ret += "" + mins + ":" + (secs < 10 ? "0" : "");
+  ret += "" + secs;
+
+  return ret;
+}
+
+function Player(props) {
+  const { video, segments } = props;
+
+  const playerRef = React.useRef(null);
+  const backgroundRef = React.useRef(null);
+  const [playing, setPlaying] = React.useState(false);
+  const [progress, setProgress] = React.useState({});
+  const [duration, setDuration] = React.useState('00:00');
+  const [dynamicTitle, setDynamicTitle] = React.useState('');
+
+  const handleSeek = (e) => {
+    const target = e.target;
+    const rect = target.getBoundingClientRect();
+    const x = e.clientX - rect.left;
+    const percentage = x / rect.width;
+    const seconds = duration * percentage;
+    playerRef.current.seekTo(seconds);
+    setPlaying(true);
   }
 
-  onPause = () => {
-    console.log('Pausing video');
-    clearInterval(this.interval);
-  }
-
-  componentDidMount() {
-    const {video} = this.props;
-    fetch(`http://localhost:8000/${video.id}.json`)
-      .then((response) => response.json())
-      .then((data) => this.setState({transcript: data}));
-  }
-
-  componentWillUnmount() {
-    console.log("will unmount");
-  }
-
-  setVisibleSegments = (timecode) => {
-    const {transcript} = this.state;
-    const offset = 2;
-    const index = transcript.segments.findIndex((segment) => segment.start <= timecode && segment.end >= timecode);
-    if (index === -1) {
-      return this.state.visible;
-    } else {
-      this.setState({visible: {
-        "actual": transcript.segments[index],
-        "previous": transcript.segments.slice(index - offset, index).concat(new Array(offset).fill({text: "-"})).slice(0, offset),
-        "next": index < transcript.segments.length - offset ? transcript.segments.slice(index + 1, index + offset + 1) : [],
-      }});
+  const toArray = (arrowObj) => {
+    if (arrowObj === undefined) return [];
+    const sessions = arrowObj;
+    const size = sessions.length;
+    const items = []
+    for (let i = 0; i < size; i++) {
+      items.push(Object.fromEntries((new Map(sessions.get(i)))));
     }
+    return items;
   }
 
-  jumpTo = (segmentId) => () => {
-    const {player, transcript} = this.state;
-    const timecode = transcript.segments[segmentId].start;
-    player.seekTo(timecode);
-    player.playVideo();
+  const handleSegmentHover = (e, id) => {
+    setDynamicTitle(id);
   }
 
-  render() {
-    const {video} = this.props;
-    const {
-      actual,
-      previous,
-      next,
-    } = this.state.visible;
-    const highlights = allHighlights[video.id] || [];
-
-
-    return (
-      <div>
-        <h2>{video.title}</h2>
-        <YouTube
-          videoId={video.id}
-          opts={{}}
-          onPlay={this.onPlay}
-          onPause={this.onPause}
-          onEnd={this.onPause}
-          onReady={(event) => this.setState({player: event.target})}
+  return (
+    <div>
+      <h2>{video.title}</h2>
+      <div className="player-wrapper">
+        <ReactPlayer
+          ref={playerRef}
+          className='react-player'
+          url={`https://www.youtube.com/watch?v=${video.id}`}
+          width='100%'
+          onProgress={setProgress}
+          onDuration={setDuration}
+          playing={playing}
+          onPlay={() => setPlaying(true)}
+          onPause={() => setPlaying(false)}
         />
-        {
-          highlights.map((highlight) => (<Highlight action={() => this.jumpTo(highlight.start)} description={highlight.text} />))
-        }
-        {
-          actual ?
-            <div className="transcript">
-              <div className="previous">
-                {previous.map((segment) => <div>{segment.text}</div>)}
-              </div>
-              <div className="actual">
-                {actual.id} — {actual.text}
-              </div>
-              <div className="next">
-                {next.map((segment) => <div>{segment.text}</div>)}
-              </div>
-            </div> : ""
-        }
       </div>
-    )
-  }
+      <div className="controls">
+        <div className="timeline">
+          <div ref={backgroundRef} className="background" onClick={handleSeek} onMouseMove={(e) => {console.log(e)}}></div>
+          <div className="firstground" style={{width: `${progress.played * 100}%`}}></div>
+          {segments ? toArray(segments.sessions).map((session, i) => {
+            if (backgroundRef.current) {
+              const width = backgroundRef.current.getBoundingClientRect().width;
+              const start = session.start * width / duration;
+              const end = session.end * width / duration;
+
+              return (
+                <div
+                  className="segments"
+                  onMouseMove={(e) => handleSegmentHover(e, session.session_id)}
+                  onMouseLeave={() => setDynamicTitle('')}
+                  onClick={() => playerRef.current.seekTo(session.start) && setPlaying(true)}
+                  style={{left: `${start}px`, width: `${end - start}px`, }}
+                ></div>
+              );
+            } else {
+              return ''
+            }
+          }) : ''}
+        </div>
+        <div className="buttons">
+          <div onClick={() => setPlaying(!playing)}>{playing ? <FaPause className="video-control" /> : <FaPlay className="video-control" />}</div>
+          <div className="duration">{fancyTimeFormat(progress.playedSeconds)} / {fancyTimeFormat(duration)}</div>
+          <div className="dynamicTitle">{dynamicTitle ? `• Segment n°${dynamicTitle}` : ''}</div>
+        </div>
+      </div>
+    </div>
+  )
 }
 
 export default Player;

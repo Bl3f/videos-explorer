@@ -151,6 +151,8 @@ function App() {
           video_id,
           id, 
           text,
+          start,
+          "end",
           COALESCE(CAST((LEAD(id, -1) OVER (PARTITION BY video_id ORDER BY id ASC) - id < -15) AS INT), 0) AS is_not_same_session,
           score 
         FROM (
@@ -168,6 +170,8 @@ function App() {
         SELECT
           video_id,
           id,
+          start,
+          "end",
           SUM(is_not_same_session) OVER (PARTITION BY video_id ORDER BY id ASC) AS session_id
         FROM raw_events
       ),
@@ -175,7 +179,7 @@ function App() {
       sessions_details AS (
         SELECT
           video_id,
-          {'session_id': session_id, 'start_id': MIN(id) - 5, 'end_id': MAX(id) + 5} AS session_detail
+          {'session_id': session_id, 'start_id': MIN(id) - 5, 'end_id': MAX(id) + 5, 'start': MIN(start), 'end': MAX("end")} AS session_detail
         FROM sessions
         GROUP BY video_id, session_id
       )
@@ -190,9 +194,6 @@ function App() {
     setReady(true);
   }
 
-  console.log(videos);
-  console.log(queryResults);
-
   return (
     <div className="App">
       <header>
@@ -205,6 +206,7 @@ function App() {
             type="text"
             value={input}
             placeholder={"Search for a concept"}
+            disabled={ready ? '' : 'disabled'}
             onChange={(e) => setInput(e.target.value)}
             onKeyDown={(e) => {if(e.key === 'Enter') search()}}
           />
@@ -226,8 +228,16 @@ function App() {
               </div>
             ))}
           </div>
-          <div className="player">
-            {selectedVideo ? <Player key={`player-${selectedVideo.id}`} video={selectedVideo}/> : ""}
+          <div className="player" style={{display: `${selectedVideo ? 'block' : 'none'}`}}>
+            {
+              selectedVideo ?
+              <Player
+                key={`player-${selectedVideo.id}`}
+                video={selectedVideo}
+                segments={queryResults.values ? queryResults.values.find((item) => item.video_id === selectedVideo.id) : []}
+              />
+              : ""
+            }
           </div>
         </div>
       </div>

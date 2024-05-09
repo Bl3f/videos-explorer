@@ -1,5 +1,5 @@
 :root {
-  --main-size: 1400px;
+  --main-size: 1600px;
   --main-bg-color: #81ecec;
   --main-color: #0984e3;
 }
@@ -134,4 +134,58 @@ header {
   padding: 20px;
   flex: 1;
   color: #2d3436;
+  height: fit-content;
+}
+
+.controls {
+  margin-top: 10px;
+}
+
+.timeline {
+  position: relative;
+  flex: 1;
+  height: 14px;
+}
+
+.timeline .firstground {
+  border-radius: 4px;
+  height: 8px;
+  background: #2d3436;
+  position: absolute;
+  top: -4px;
+  pointer-events: none;
+}
+
+.timeline .background {
+  height: 8px;
+  border-radius: 4px;
+  width: 100%;
+  background: #dfe6e9;
+  position: absolute;
+  top: -4px;
+  cursor: pointer;
+}
+
+.segments {
+  position: absolute;
+  height: 8px;
+  border-radius: 4px;
+  top: -4px;
+  cursor: pointer;
+  background: #ff7675;
+  min-width: 6px;
+}
+
+.buttons {
+  display: flex;
+  align-items: start;
+}
+
+.video-control {
+  cursor: pointer;
+}
+
+.duration, .dynamicTitle {
+  margin-left: 10px;
+  font-size: .8rem;
 }

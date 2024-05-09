@@ -48,7 +48,7 @@ class DuckDBClient {
     const results = await conn.query(sql);
 
     const rows = {
-      values: results.toArray().map(Object.fromEntries),
+      values: results.toArray().map((row) => row.toJSON()),
       columns: results.schema.fields.map((d) => d.name),
     };
 
