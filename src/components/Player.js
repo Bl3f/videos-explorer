@@ -79,7 +79,7 @@ class Player extends React.Component {
 
     return (
       <div>
-        <h2>{video.title} ({video.id})</h2>
+        <h2>{video.title}</h2>
         <YouTube
           videoId={video.id}
           opts={{}}

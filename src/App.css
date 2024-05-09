@@ -1,101 +1,137 @@
+:root {
+  --main-size: 1400px;
+  --main-bg-color: #81ecec;
+  --main-color: #0984e3;
+}
+
 .App {
   width: 100%;
   height: 100%;
   display: flex;
   flex-direction: column;
   align-content: stretch;
+  background: var(--main-bg-color);
+  color: var(--main-color)
+}
+
+.App h1, .App h2, .App h3, .App h4, .App h5, .App h6 {
+  font-family: Inter,sans-serif;
+  margin: 0;
 }
 
 .App h1 {
+  text-transform: uppercase;
+  font-size: 4rem;
+  margin-bottom: 10px;
+}
+
+.App h2 {
+  text-transform: uppercase;
+}
+
+.App header .subtitle {
+  font-size: .8rem;
+  font-style: italic;
+}
+
+header {
+  width: var(--main-size);
+  margin: 40px auto;
+  flex: 0 0 100px;
 }
 
 .content {
-  flex: 1;
-  position: relative;
-  display: flex;
-}
-
-.content .wrapper {
-  position: relative;
-  flex: 1;
-  padding: 0 20px;
-  margin-right: 10px;
-}
-
-.videos {
-  position: absolute;
-  overflow-y: auto;
+  width: var(--main-size);
+  margin: 0px auto;
+  flex: 1 1 auto;
+  min-height: 0px;
   height: 100%;
-  width: 100%;
-}
-
-.player {
-  flex: 2;
-  padding: 0 40px;
-}
-
-.yt-card {
-  background: #e0e0e0;
-  border: 1px solid #d5d5d5;
-  width: 500px;
-  padding: 20px;
   display: flex;
-  border-radius: 6px;
-  margin-bottom: 10px;
+  flex-direction: column;
+}
+
+.content .search {
+  width: 600px;
+  display: flex;
+}
+
+.content .search input[type=text] {
+  flex: 1;
+  height: 30px;
+  background: transparent;
+  border: 1px solid var(--main-color);
+  border-radius: 4px;
+  padding: 4px 8px;
+  color: var(--main-color);
+}
+
+.content .search input[type=button] {
+  height: 40px;
+  background: var(--main-color);
+  color: white;
+  border: none;
+  border-radius: 4px;
+  padding: 4px 14px;
+  margin-left: 10px;
+}
+
+.content .search input[type=button]:hover {
+  cursor: pointer;
+  background: #116eb9;
+}
+
+.wrapper {
+  height: 100%;
+  display: flex;
+}
+
+.results {
+  height: 100%;
+  overflow-y: auto;
+  flex: 0 0 600px;
+}
+
+.video {
+  border-radius: 4px;
+  display: flex;
+  padding: 10px;
+  margin-top: 10px;
+}
+
+.video:hover {
+  background: #ffeaa7;
   cursor: pointer;
 }
 
-.yt-card.selected {
-  background: #f0f0f0;
+.video.selected {
+  background: #fdcb6e;
 }
 
-.left, .right {
-  flex: 1;
-  position: relative;
+.video .title {
+  font-weight: 500;
 }
 
-.yt-card img {
-  width: 100%;
+.video img {
   position: relative;
   overflow: hidden;
   aspect-ratio: 16/9;
   background-position: center;
   background-size: cover;
   object-fit: cover;
+  border-radius: 6px;
+  flex: 0 0 130px;
 }
 
-.yt-card h2 {
-  font-size: 1rem;
-  margin: 0;
-  padding: 0;
-  margin-left: 20px;
+.video .details {
+  flex: 4;
+  padding: 10px;
 }
 
-.yt-card .stats {
-  position: absolute;
-  right: 2px;
-  bottom: 10px;
-}
-
-.yt-card .stats span {
-  background: #333333;
-  color: white;
-  font-size: .7rem;
-  padding: 2px;
-  border-radius: 2px;
-  margin-right: 2px;
-}
-
-.transcript {
-  font-size: 2rem;
-}
-
-.transcript .actual {
-  color: #254c67;
-  font-weight: bold;
-}
-
-
-.transcript .previous, .transcript .next {
-  color: #3b3b3b;
+.player {
+  margin: 10px 30px;
+  background: #74b9ff;
+  border-radius: 4px;
+  padding: 20px;
+  flex: 1;
+  color: #2d3436;
 }

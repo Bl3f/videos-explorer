@@ -4,17 +4,17 @@ import Player from "./components/Player";
 import DuckDBClient from "./utils/DuckDB";
 
 function App() {
-  const [videos, setVideos] = useState([]);
+  const [videos, setVideos] = useState({});
   const [loading, setLoading] = useState(true);
   const [selectedVideo, setSelectedVideo] = useState(null);
 
   // Model loading
-  const [ready, setReady] = useState(null);
+  const [ready, setReady] = useState(false);
   const [disabled, setDisabled] = useState(false);
   const [progressItems, setProgressItems] = useState([]);
 
   // Inputs and outputs
-  const [input, setInput] = useState('DuckDB');
+  const [input, setInput] = useState('');
   const [output, setOutput] = useState('');
 
   // DuckDB stuff
@@ -30,15 +30,22 @@ function App() {
   useEffect(() => {
     fetch("http://localhost:8000/videos.json")
       .then((response) => response.json())
+      .then((data) => Object.fromEntries((new Map(data.map((video) => [video.id, video])))))
       .then((data) => setVideos(data))
       .then(() => setLoading(false));
   }, []);
 
   const connectAndGetVersion = async () => {
+    setReady(false);
     const version = await client.version();
     const db = await client.db();
     setVersion(version);
     setDB(db);
+    await client.query(`CREATE TABLE IF NOT EXISTS segments AS FROM read_parquet('http://localhost:8000/segments.parquet');`)
+    await client.query("INSTALL fts;");
+    await client.query("LOAD fts;");
+    await client.query("PRAGMA create_fts_index('segments', 'row_id', 'text', overwrite=1)");
+    setReady(true);
   }
 
   useEffect(() => {
@@ -112,7 +119,7 @@ function App() {
     // worker.current.postMessage({text: input});
     await client.query(`
       CREATE TABLE segments AS FROM read_parquet('http://localhost:8000/segments.parquet');
-      alter table segments alter column encoded set data type FLOAT[1024];
+      ALTER TABLE segments alter column encoded set data type FLOAT[1024];
     `)
     let results;
     results = await client.query("DESCRIBE TABLE segments");
@@ -136,13 +143,95 @@ function App() {
     setQueryResults(results);
   }
 
-  console.log(output);
+  const search = async () => {
+    setReady(false)
+    const results = await client.query(`
+      WITH raw_events AS (
+        SELECT
+          video_id,
+          id, 
+          text,
+          COALESCE(CAST((LEAD(id, -1) OVER (PARTITION BY video_id ORDER BY id ASC) - id < -15) AS INT), 0) AS is_not_same_session,
+          score 
+        FROM (
+          SELECT *, fts_main_segments.match_bm25(
+            row_id, 
+            '${input}'
+          ) AS score FROM segments
+        ) sq 
+        WHERE
+          score is not null AND score > 2
+        ORDER BY video_id, id
+      ),
+      
+      sessions AS (
+        SELECT
+          video_id,
+          id,
+          SUM(is_not_same_session) OVER (PARTITION BY video_id ORDER BY id ASC) AS session_id
+        FROM raw_events
+      ),
+      
+      sessions_details AS (
+        SELECT
+          video_id,
+          {'session_id': session_id, 'start_id': MIN(id) - 5, 'end_id': MAX(id) + 5} AS session_detail
+        FROM sessions
+        GROUP BY video_id, session_id
+      )
+      
+      SELECT
+        video_id, ARRAY_AGG(session_detail) AS sessions, COUNT() AS nb
+      FROM sessions_details
+      GROUP BY video_id
+      ORDER BY nb DESC
+    `);
+    setQueryResults(results);
+    setReady(true);
+  }
+
+  console.log(videos);
   console.log(queryResults);
 
   return (
     <div className="App">
-      <h1>Data Council 2024 — unofficial recommendations by <a href="https://blef.fr">blef.fr</a></h1>
-      {loading ? "loading..." : ""}
+      <header>
+        <h1>Data Council 2024</h1>
+        <h2>Highlights <span className="subtitle">unofficial (by blef and juhache)</span></h2>
+      </header>
+      <div className="content">
+        <div className="search">
+          <input
+            type="text"
+            value={input}
+            placeholder={"Search for a concept"}
+            onChange={(e) => setInput(e.target.value)}
+            onKeyDown={(e) => {if(e.key === 'Enter') search()}}
+          />
+          <input type="button" disabled={ready ? '' : 'disabled'} onClick={search} value="search"/>
+        </div>
+        <div className="wrapper">
+          <div className="results">
+            {queryResults.values.map((result) => (
+              <div
+                className={`video ${selectedVideo && selectedVideo.id === result.video_id ? 'selected' : ''}`}
+                key={result.video_id}
+                onClick={() => setSelectedVideo(videos[result.video_id])}
+              >
+                <img src={videos[result.video_id].thumbnail} alt=""/>
+                <div className="details">
+                  <div className="title">{videos[result.video_id].title}</div>
+                  <div>{parseInt(result.nb)} occurrences</div>
+                </div>
+              </div>
+            ))}
+          </div>
+          <div className="player">
+            {selectedVideo ? <Player key={`player-${selectedVideo.id}`} video={selectedVideo}/> : ""}
+          </div>
+        </div>
+      </div>
+      {/*{loading ? "loading..." : ""}
       <div className="content">
         <div className="wrapper">
           <div className="videos">
@@ -177,7 +266,7 @@ function App() {
           <pre>Output: --</pre>
           {selectedVideo ? <Player key={`player-${selectedVideo.id}`} video={selectedVideo}/> : ""}
         </div>
-      </div>
+      </div>*/}
     </div>
   );
 }
