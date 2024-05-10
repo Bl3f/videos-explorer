@@ -1,16 +1,7 @@
 import React, {useEffect} from "react";
-import Highlight from "./Highlight";
 import ReactPlayer from 'react-player/youtube';
 import { FaPause, FaPlay } from "react-icons/fa";
 import {ADMIN_MODE, HIGHLIGHTS_OFFSET} from "../consts";
-
-
-const allHighlights = {
-  cylAr9oUluI: [
-    {start: 31, end: 47, text: "Awesome catchphrase regarding data culture."},
-    {start: 89, end: 120, text: "Awesome catchphrase 2 regarding data culture."},
-  ],
-}
 
 function fancyTimeFormat(duration) {
   // Hours, minutes and seconds
@@ -52,7 +43,7 @@ function Player(props) {
     fetch(`https://storage.googleapis.com/videos-explorer/${video.id}.json`)
       .then((response) => response.json())
       .then((data) => setTranscript(data));
-  }, []);
+  });
 
   const findCurrentSegment = (progress) => {
     if (!transcript.segments) {
