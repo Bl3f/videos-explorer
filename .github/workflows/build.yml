@@ -13,4 +13,5 @@ jobs:
         uses: actions/setup-node@v4
         with:
           node-version: '16.x'
+      - run: npm install --include dev
       - run: npm run deploy
