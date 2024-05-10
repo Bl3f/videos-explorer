@@ -1,21 +1,17 @@
 {
   "files": {
-    "main.css": "https://lab.blef.fr/datacouncil/static/css/main.bf5bda12.css",
-    "main.js": "https://lab.blef.fr/datacouncil/static/js/main.91da387c.js",
-    "static/js/62.b321db4c.chunk.js": "https://lab.blef.fr/datacouncil/static/js/62.b321db4c.chunk.js",
-    "reactPlayerPreview.js": "https://lab.blef.fr/datacouncil/static/js/reactPlayerPreview.93aa36b5.chunk.js",
-    "static/js/453.fe35fe43.chunk.js": "https://lab.blef.fr/datacouncil/static/js/453.fe35fe43.chunk.js",
-    "static/js/964.eea637a6.chunk.js": "https://lab.blef.fr/datacouncil/static/js/964.eea637a6.chunk.js",
-    "index.html": "https://lab.blef.fr/datacouncil/index.html",
-    "main.bf5bda12.css.map": "https://lab.blef.fr/datacouncil/static/css/main.bf5bda12.css.map",
-    "main.91da387c.js.map": "https://lab.blef.fr/datacouncil/static/js/main.91da387c.js.map",
-    "62.b321db4c.chunk.js.map": "https://lab.blef.fr/datacouncil/static/js/62.b321db4c.chunk.js.map",
-    "reactPlayerPreview.93aa36b5.chunk.js.map": "https://lab.blef.fr/datacouncil/static/js/reactPlayerPreview.93aa36b5.chunk.js.map",
-    "453.fe35fe43.chunk.js.map": "https://lab.blef.fr/datacouncil/static/js/453.fe35fe43.chunk.js.map",
-    "964.eea637a6.chunk.js.map": "https://lab.blef.fr/datacouncil/static/js/964.eea637a6.chunk.js.map"
+    "main.css": "/static/css/main.bf5bda12.css",
+    "main.js": "/static/js/main.9030c99b.js",
+    "reactPlayerPreview.js": "/static/js/reactPlayerPreview.93aa36b5.chunk.js",
+    "static/js/453.fe35fe43.chunk.js": "/static/js/453.fe35fe43.chunk.js",
+    "index.html": "/index.html",
+    "main.bf5bda12.css.map": "/static/css/main.bf5bda12.css.map",
+    "main.9030c99b.js.map": "/static/js/main.9030c99b.js.map",
+    "reactPlayerPreview.93aa36b5.chunk.js.map": "/static/js/reactPlayerPreview.93aa36b5.chunk.js.map",
+    "453.fe35fe43.chunk.js.map": "/static/js/453.fe35fe43.chunk.js.map"
   },
   "entrypoints": [
     "static/css/main.bf5bda12.css",
-    "static/js/main.91da387c.js"
+    "static/js/main.9030c99b.js"
   ]
 }
