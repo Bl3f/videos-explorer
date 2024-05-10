@@ -13,5 +13,9 @@ jobs:
         uses: actions/setup-node@v4
         with:
           node-version: '16.x'
+      - name: Config git
+        run: |
+          git config --global user.email "christophe.blefari@gmail.com"
+          git config --global user.name "Christophe Blefari"
       - run: npm install --include dev
       - run: npm run deploy
