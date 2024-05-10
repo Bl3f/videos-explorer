@@ -18,4 +18,9 @@ jobs:
           git config --global user.email "christophe.blefari@gmail.com"
           git config --global user.name "Christophe Blefari"
       - run: npm install --include dev
-      - run: npm run deploy
+      - run: npm run build
+      - name: Deploy
+        uses: peaceiris/actions-gh-pages@v4
+        with:
+          github_token: ${{ secrets.GITHUB_TOKEN }}
+          publish_dir: ./build
