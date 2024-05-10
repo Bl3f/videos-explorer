@@ -15,7 +15,7 @@ function App() {
   const [input, setInput] = useState('');
 
   // DuckDB stuff
-  const [setVersion] = useState(null);
+  const [, setVersion] = useState(null);
   const [queryResults, setQueryResults] = useState({headers: [], values: []});
   const [, setDB] = useState(null);
   const [client] = useState(new DuckDBClient());
@@ -45,7 +45,8 @@ function App() {
 
   useEffect(() => {
     connectAndGetVersion();
-  });
+  // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
 
   const search = async () => {
     setMode(SEARCH_MODE);
