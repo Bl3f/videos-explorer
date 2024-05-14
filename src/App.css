@@ -1,8 +1,9 @@
 :root {
   --main-size: 1600px;
-  --main-bg-color: #81ecec;
+  --main-bg-color: #ffffff;
   --main-color: #0984e3;
   --timeline-radius: 0px;
+  --large-padding: 140px;
 }
 
 .App {
@@ -22,12 +23,12 @@
 
 .App h1 {
   text-transform: uppercase;
-  font-size: 4rem;
-  margin-bottom: 10px;
+  font-size: 2rem;
 }
 
 .App h2 {
-  text-transform: uppercase;
+  color: var(--main-color);
+  margin: 20px 0;
 }
 
 .App header .subtitle {
@@ -36,28 +37,39 @@
 }
 
 .App .summary {
-  width: 600px;
+  background-color: rgba(211, 224, 238, 0.5);
   margin: 0px 0 20px 0;
+  border-radius: 4px;
+  padding: 20px;
 }
 
 header {
-  width: var(--main-size);
-  margin: 40px auto;
-  flex: 0 0 100px;
+  width: calc(100% - 2 * var(--large-padding));
+  padding: 20px var(--large-padding);
+  border-bottom: 1px solid var(--main-color);
+  display: flex;
+  justify-content: space-between;
 }
 
 .content {
-  width: var(--main-size);
+  width: calc(100% - 2 * var(--large-padding));
   margin: 0px auto;
+  padding: 20px var(--large-padding);
   flex: 1 1 auto;
   min-height: 0px;
   height: 100%;
   display: flex;
+  background: #edf2f5;
+  gap: 40px;
+}
+
+.content .left {
+  width: 600px;
+  display: flex;
   flex-direction: column;
 }
 
-.content .search {
-  width: 600px;
+.search {
   display: flex;
 }
 
@@ -67,37 +79,55 @@ header {
   background: transparent;
   border: 1px solid var(--main-color);
   border-radius: 4px;
-  padding: 4px 8px;
+  padding: 6px 12px;
   color: var(--main-color);
   margin-right: 10px;
+  font-size: 1rem;
 }
 
-input[type=button] {
-  height: 40px;
+input[type=button], button {
+  font-size: 1rem;
+  height: 44px;
   background: var(--main-color);
   color: white;
   border: none;
   border-radius: 4px;
-  padding: 4px 14px;
+  padding: 6px 12px;
   margin-right: 10px;
 }
 
-input[type=button]:hover {
+input[type=button]:hover, button:hover {
   cursor: pointer;
-  background: #116eb9;
+  background: #116eb9 !important;
 }
 
-.wrapper {
+input[type=button].noMargin, button.noMargin {
+  margin: 0;
+}
+
+a {
+  color: var(--main-color);
+  text-decoration: none;
+  border-bottom: 1px solid var(--main-color);
+  transition: border-width 0.1s ease-in-out;
+}
+
+a:hover {
+  color: #116eb9;
+  border-bottom: 4px solid #116eb9;
+}
+
+.right {
   height: 100%;
   display: flex;
   flex: 1;
   min-height: 0;
+  flex-direction: column;
 }
 
 .results {
   height: 100%;
   overflow-y: auto;
-  flex: 0 0 600px;
 }
 
 .video {
@@ -105,15 +135,16 @@ input[type=button]:hover {
   display: flex;
   padding: 10px;
   margin-top: 10px;
+  transition: background-color 0.2s ease-in-out;
 }
 
 .video:hover {
-  background: #ffeaa7;
+  background: rgba(211, 224, 238, 0.5);
   cursor: pointer;
 }
 
 .video.selected {
-  background: #fdcb6e;
+  background: rgba(211, 224, 238, 1);
 }
 
 .video .title {
@@ -137,10 +168,7 @@ input[type=button]:hover {
 }
 
 .player {
-  margin: 10px 30px;
-  background: #74b9ff;
   border-radius: 4px;
-  padding: 20px;
   flex: 1;
   color: #2d3436;
   height: fit-content;
@@ -226,4 +254,18 @@ input[type=button]:hover {
 
 .transcript.active {
   font-weight: bold;
+}
+
+.player-wrapper {
+  width: auto;
+  height: auto;
+}
+.react-player {
+  padding-top: 56.25%;
+  position: relative;
+}
+
+.react-player > div {
+  position: absolute;
+  top: 0;
 }

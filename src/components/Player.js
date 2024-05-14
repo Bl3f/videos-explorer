@@ -95,6 +95,7 @@ function Player(props) {
           className='react-player'
           url={`https://www.youtube.com/watch?v=${video.id}`}
           width='100%'
+          height='100%'
           playing={playing}
           playbackRate={playbackRate}
           onProgress={(value) => {setProgress(value); findCurrentSegment(value)}}

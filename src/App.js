@@ -85,7 +85,7 @@ function App() {
       sessions_details AS (
         SELECT
           video_id,
-          {'session_id': session_id, 'start_id': MIN(id) - 5, 'end_id': MAX(id) + 5, 'start': MIN(start), 'end': MAX("end")} AS session_detail
+          {'session_id': session_id, 'start_id': MIN(id), 'end_id': MAX(id), 'start': MIN(start) - 5, 'end': MAX("end") + 5} AS session_detail
         FROM sessions
         GROUP BY video_id, session_id
       )
@@ -109,28 +109,37 @@ function App() {
   return (
     <div className="App">
       <header>
-        <h1>Data Council 2024</h1>
-        <h2><span onClick={() => setMode(ADMIN_MODE)}>Highlights</span> <span className="subtitle">unofficial (by blef and juhache)</span></h2>
-        {ADMIN_MODE === mode ? <pre>admin mode</pre> : ''}
+        <h1>✨ Highlights</h1>
+        <button className="noMargin" onClick={() => setMode(ADMIN_MODE)} style={{background: ADMIN_MODE === mode ? "red": "var(--main-color)"}}>Admin mode</button>
       </header>
       <div className="content">
-        <div className="summary">In this app you can search for concepts or watch highlights we handpicked in the 80 data councils videos. Data Council highlights is an application designed and developed by blef and juhache. This is not affiliated to the Data Council.</div>
-        {state.loading ? "App is initializing..." : ""}
-        {!state.loading  ?
-        <div className="search">
-          <input
-            type="text"
-            value={input}
-            placeholder={"Search for a concept"}
-            disabled={state.ready ? '' : 'disabled'}
-            onChange={(e) => setInput(e.target.value)}
-            onKeyDown={(e) => {if(e.key === 'Enter') search()}}
-          />
-          <input type="button" disabled={state.ready ? '' : 'disabled'} onClick={search} value="search"/>
-          <div><span style={{marginRight: '10px'}}>•</span><input type="button" disabled={state.ready ? '' : 'disabled'} onClick={() => setMode(HIGHLIGHTS_MODE)} value="watch highlights"/></div>
-        </div>
-          : ''}
-        <div className="wrapper">
+        <div className="left">
+          <h2 className="subtitle">Data council 2024 playlist</h2>
+          <p>Watch highlights and search terms among the 80 <a href="https://www.datacouncil.ai/">Data Council 2024</a> videos.</p>
+          {!state.loading ?
+            <div className="search">
+              <input
+                type="text"
+                value={input}
+                placeholder={"Search for a concept"}
+                disabled={state.ready ? '' : 'disabled'}
+                onChange={(e) => setInput(e.target.value)}
+                onKeyDown={(e) => {if (e.key === 'Enter') search()}}
+              />
+              <input
+                type="button"
+                disabled={state.ready ? '' : 'disabled'}
+                onClick={search}
+                value="search"
+              />
+              <div>
+                <span style={{marginRight: '10px'}}>
+                  •
+                </span>
+                <input type="button" className="noMargin" disabled={state.ready ? '' : 'disabled'} onClick={() => setMode(HIGHLIGHTS_MODE)} value="watch highlights"/>
+              </div>
+            </div>
+            : ''}
           <div className="results">
             {mode === SEARCH_MODE && queryResults.values.map((result) => (
               <div
@@ -158,18 +167,22 @@ function App() {
               </div>
             ))}
           </div>
+        </div>
+        <div className="right">
+          <div className="summary">🤔 In this app you can search for concepts or watch highlights we handpicked in the 80 data councils videos. Data Council highlights is an application designed and developed by <a href="https://blef.fr">blef</a> and <a href="https://juhache.substack.com">juhache</a>. This is not affiliated to the Data Council.</div>
+          {state.loading ? "App is initializing..." : ""}
           <div className="player" style={{display: `${selectedVideo ? 'block' : 'none'}`}}>
             {
               selectedVideo ?
-              <Player
-                key={`player-${selectedVideo.id}`}
-                video={selectedVideo}
-                segments={queryResults.values ? queryResults.values.find((item) => item.video_id === selectedVideo.id) : []}
-                mode={mode}
-                setHighlights={handleHighlightsCreation}
-                highlights={highlights[selectedVideo.id]}
-              />
-              : ""
+                <Player
+                  key={`player-${selectedVideo.id}`}
+                  video={selectedVideo}
+                  segments={queryResults.values ? queryResults.values.find((item) => item.video_id === selectedVideo.id) : []}
+                  mode={mode}
+                  setHighlights={handleHighlightsCreation}
+                  highlights={highlights[selectedVideo.id]}
+                />
+                : ""
             }
           </div>
         </div>
