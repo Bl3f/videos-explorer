@@ -112,9 +112,9 @@ function App() {
         <h1>✨ Highlights</h1>
         <button className="noMargin" onClick={() => setMode(ADMIN_MODE)} style={{background: ADMIN_MODE === mode ? "red": "var(--main-color)"}}>Admin mode</button>
       </header>
+      <h2 className="subtitle">Data Council 2024 playlist</h2>
       <div className="content">
         <div className="left">
-          <h2 className="subtitle">Data council 2024 playlist</h2>
           <p>Watch highlights and search terms among the 80 <a href="https://www.datacouncil.ai/">Data Council 2024</a> videos.</p>
           {!state.loading ?
             <div className="search">

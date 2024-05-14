@@ -1,6 +1,6 @@
 :root {
   --main-size: 1600px;
-  --main-bg-color: #ffffff;
+  --main-bg-color: #edf2f5;
   --main-color: #0984e3;
   --timeline-radius: 0px;
   --large-padding: 140px;
@@ -12,7 +12,7 @@
   display: flex;
   flex-direction: column;
   align-content: stretch;
-  background: var(--main-bg-color);
+  background: #FFF;
   color: var(--main-color)
 }
 
@@ -28,12 +28,12 @@
 
 .App h2 {
   color: var(--main-color);
-  margin: 20px 0;
 }
 
-.App header .subtitle {
-  font-size: .8rem;
-  font-style: italic;
+.App .subtitle {
+  font-size: 2rem;
+  padding: 20px var(--large-padding) 0px var(--large-padding);
+  background: var(--main-bg-color);
 }
 
 .App .summary {
@@ -211,8 +211,8 @@ a:hover {
   cursor: pointer;
   background: rgba(255, 118, 117, 0.7);
   min-width: 6px;
-  border-left: #74b9ff 2px solid;
-  border-right: #74b9ff 2px solid;
+  border-left: var(--main-bg-color) 2px solid;
+  border-right: var(--main-bg-color) 2px solid;
 }
 
 .segments.highlight {
@@ -259,6 +259,9 @@ a:hover {
 .player-wrapper {
   width: auto;
   height: auto;
+  border-radius: 10px;
+  overflow: hidden;
+  margin-top: 20px;
 }
 .react-player {
   padding-top: 56.25%;
