@@ -1,7 +1,7 @@
 {
   "name": "data-council-discovery",
   "version": "0.1.0",
-  "homepage": "https://lab.blef.fr/videos-explorer/",
+  "homepage": "https://qrators.io/datacouncil",
   "private": true,
   "dependencies": {
     "@duckdb/duckdb-wasm": "^1.28.1-dev193.0",

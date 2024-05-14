@@ -14,7 +14,7 @@ root.render(
   <React.StrictMode>
     <BrowserRouter>
       <Routes>
-        <Route path="*" element={<App />} />
+        <Route path="/datacouncil/*" element={<App />} />
       </Routes>
     </BrowserRouter>
   </React.StrictMode>
