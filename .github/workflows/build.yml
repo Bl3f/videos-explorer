@@ -19,6 +19,8 @@ jobs:
           git config --global user.name "Christophe Blefari"
       - run: npm install --include dev
       - run: npm run build
+        env:
+          PUBLIC_URL: "https://www.qrators.io/datacouncil"
       - name: Deploy
         uses: peaceiris/actions-gh-pages@v4
         with:
