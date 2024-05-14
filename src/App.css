@@ -130,6 +130,10 @@ a:hover {
   overflow-y: auto;
 }
 
+.results .summary {
+  margin-top: 20px;
+}
+
 .video {
   border-radius: 4px;
   display: flex;
@@ -271,4 +275,29 @@ a:hover {
 .react-player > div {
   position: absolute;
   top: 0;
+}
+
+input[type='range'] {
+  width: 60px;
+  -webkit-appearance: none !important;
+  background: var(--main-bg-color);
+}
+
+.volume {
+  margin: -2px 0 0 10px;
+}
+
+input[type="range"]::-moz-range-thumb {
+  background-color: #2d3436;
+  border: 0px;
+  cursor: pointer;
+  padding:0;
+}
+input[type="range"]::-moz-range-progress {
+  height: 6px;
+  background-color: #2d3436;
+}
+input[type="range"]::-moz-range-track {
+  height: 6px;
+  background-color: #b2bec3;
 }

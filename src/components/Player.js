@@ -24,6 +24,7 @@ function fancyTimeFormat(duration) {
 
 function Player(props) {
   const { video, segments, mode, setHighlights, highlights } = props;
+  const savedPlayerConfig = window.localStorage.getItem("playerConfig") ? JSON.parse(window.localStorage.getItem("playerConfig")) : {"volume": 0.8, "playbackRate": 1};
 
   const [transcript, setTranscript] = React.useState({segments: []});
   const [currentSegment, setCurrentSegment] = React.useState({});
@@ -32,8 +33,9 @@ function Player(props) {
   const playerRef = React.useRef(null);
   const backgroundRef = React.useRef(null);
   const [playing, setPlaying] = React.useState(false);
+  const [volume, setVolume] = React.useState(savedPlayerConfig.volume);
   const [progress, setProgress] = React.useState({});
-  const [playbackRate, setplaybackRate] = React.useState(1);
+  const [playbackRate, setplaybackRate] = React.useState(savedPlayerConfig.playbackRate);
   const [duration, setDuration] = React.useState('00:00');
   const [dynamicTitle, setDynamicTitle] = React.useState('');
 
@@ -98,6 +100,7 @@ function Player(props) {
           width='100%'
           height='100%'
           playing={playing}
+          volume={volume}
           playbackRate={playbackRate}
           onProgress={(value) => {setProgress(value); findCurrentSegment(value)}}
           onDuration={setDuration}
@@ -154,11 +157,32 @@ function Player(props) {
         <div className="buttons">
           <div onClick={() => setPlaying(!playing)}>{playing ? <FaPause className="video-control" /> : <FaPlay className="video-control" />}</div>
           <div className="duration">{fancyTimeFormat(progress.playedSeconds)} / {fancyTimeFormat(duration)}</div>
+          <div className="volume">
+            <input
+              type="range"
+              min={0}
+              max={1}
+              step={0.1}
+              value={volume}
+              onChange={event => {
+                setVolume(event.target.valueAsNumber); window.localStorage.setItem("playerConfig", JSON.stringify({...savedPlayerConfig, volume: event.target.valueAsNumber}));
+              }}
+            />
+          </div>
           <div className="dynamicTitle">{dynamicTitle ? `• ${dynamicTitle}` : ''}</div>
-          <div className="playbackRate" onClick={() => setplaybackRate(Math.max(1, (playbackRate + .25) % 2.25))}>x{playbackRate}</div>
+          <div
+            className="playbackRate"
+            onClick={() => {
+              const value = Math.max(1, (playbackRate + .25) % 2.25);
+              setplaybackRate(value);
+              window.localStorage.setItem("playerConfig", JSON.stringify({...savedPlayerConfig, playbackRate: value}));
+            }}
+          >
+            x{playbackRate}
+          </div>
         </div>
         {mode === ADMIN_MODE && <div className="admin">
-          <h3>Create a highlight</h3>
+        <h3>Create a highlight</h3>
           {
             currentSegment && transcript.segments &&
             transcript.segments.slice(

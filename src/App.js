@@ -170,6 +170,7 @@ function App() {
             </div>
             : ''}
           <div className="results">
+            {initialized && mode === SEARCH_MODE && input === "" ? <div className="summary">Search for a term or watch highlights 🤭</div> : ""}
             {mode === SEARCH_MODE && queryResults.values.map((result) => (
               <div
                 className={`video ${selectedVideo && selectedVideo.id === result.video_id ? 'selected' : ''}`}
