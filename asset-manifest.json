@@ -1,17 +1,17 @@
 {
   "files": {
-    "main.css": "/videos-explorer/static/css/main.a200e414.css",
-    "main.js": "/videos-explorer/static/js/main.644998ca.js",
+    "main.css": "/videos-explorer/static/css/main.3f8362d6.css",
+    "main.js": "/videos-explorer/static/js/main.3a150636.js",
     "reactPlayerPreview.js": "/videos-explorer/static/js/reactPlayerPreview.93aa36b5.chunk.js",
     "static/js/453.fe35fe43.chunk.js": "/videos-explorer/static/js/453.fe35fe43.chunk.js",
     "index.html": "/videos-explorer/index.html",
-    "main.a200e414.css.map": "/videos-explorer/static/css/main.a200e414.css.map",
-    "main.644998ca.js.map": "/videos-explorer/static/js/main.644998ca.js.map",
+    "main.3f8362d6.css.map": "/videos-explorer/static/css/main.3f8362d6.css.map",
+    "main.3a150636.js.map": "/videos-explorer/static/js/main.3a150636.js.map",
     "reactPlayerPreview.93aa36b5.chunk.js.map": "/videos-explorer/static/js/reactPlayerPreview.93aa36b5.chunk.js.map",
     "453.fe35fe43.chunk.js.map": "/videos-explorer/static/js/453.fe35fe43.chunk.js.map"
   },
   "entrypoints": [
-    "static/css/main.a200e414.css",
-    "static/js/main.644998ca.js"
+    "static/css/main.3f8362d6.css",
+    "static/js/main.3a150636.js"
   ]
 }
