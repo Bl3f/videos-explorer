@@ -134,7 +134,7 @@ function Player(props) {
           }) : ''}
           {
             highlights ? highlights.map((highlight, i) => {
-              if (backgroundRef.current && transcript.segments) {
+              if (backgroundRef.current && transcript.segments.length > 0) {
                 const width = backgroundRef.current.getBoundingClientRect().width;
                 const start = transcript.segments[highlight.start].start * width / duration;
                 const end = transcript.segments[highlight.end].end * width / duration;
@@ -190,7 +190,7 @@ function Player(props) {
               currentSegment.id + HIGHLIGHTS_OFFSET
             ).map((segment, i) => (
               <div
-                key={`transcript-${i}`}
+                key={`transcript-${video.id}-${i}`}
                 className={currentSegment.id === segment.id ? "transcript active" : "transcript"}
               >
                 <input

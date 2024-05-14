@@ -133,8 +133,6 @@ function App() {
     window.localStorage.setItem("highlights", JSON.stringify({...highlights, [highlight.video_id]: [...previousValue, highlight]}));
   }
 
-  console.log("redraw")
-
   return (
     <div className="App">
       <header>
@@ -205,7 +203,7 @@ function App() {
             {
               initialized && selectedVideo ?
                 <Player
-                  key="player"
+                  key={`player-${selectedVideo.id}`}
                   video={selectedVideo}
                   segments={queryResults.values ? queryResults.values.find((item) => item.video_id === selectedVideo.id) : []}
                   mode={mode}
