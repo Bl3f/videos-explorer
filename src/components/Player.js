@@ -43,7 +43,8 @@ function Player(props) {
     fetch(`https://storage.googleapis.com/videos-explorer/${video.id}.json`)
       .then((response) => response.json())
       .then((data) => setTranscript(data));
-  });
+  // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
 
   const findCurrentSegment = (progress) => {
     if (!transcript.segments) {
@@ -106,7 +107,7 @@ function Player(props) {
       </div>
       <div className="controls">
         <div className="timeline">
-          <div ref={backgroundRef} className="background" onClick={handleSeek} onMouseMove={(e) => {console.log(e)}}></div>
+          <div ref={backgroundRef} className="background" onClick={handleSeek} onMouseMove={(e) => {}}></div>
           <div className="firstground" style={{width: `${progress.played * 100}%`}}></div>
           {segments ? toArray(segments.sessions).map((session, i) => {
             if (backgroundRef.current) {
@@ -116,6 +117,7 @@ function Player(props) {
 
               return (
                 <div
+                  key={`segment-${i}`}
                   className="segments"
                   onMouseMove={(e) => handleSegmentHover(e, session.session_id)}
                   onMouseLeave={() => setDynamicTitle('')}
@@ -136,6 +138,7 @@ function Player(props) {
 
                 return (
                   <div
+                    key={`highlight-${i}`}
                     className="segments highlight"
                     onMouseMove={() => setDynamicTitle(highlight.description)}
                     onMouseLeave={() => setDynamicTitle('')}

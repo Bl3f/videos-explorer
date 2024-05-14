@@ -3,16 +3,23 @@ import {useEffect, useState} from "react";
 import Player from "./components/Player";
 import DuckDBClient from "./utils/DuckDB";
 import {ADMIN_MODE, HIGHLIGHTS_MODE, SEARCH_MODE} from "./consts";
+import {useSearchParams} from "react-router-dom";
 
 
 function App() {
+  // available searchParams possible
+  // search term, videoId
+  const [searchParams, setSearchParams] = useSearchParams();
+
+
   const [mode, setMode] = useState(SEARCH_MODE);
   const [videos, setVideos] = useState({});
-  const [state, setState] = useState({loading: true, ready: false});
+  const [initialized, setInitialized] = useState(false);
+  const [running, setRunning] = useState(false);
   const [selectedVideo, setSelectedVideo] = useState(null);
 
   // Inputs and outputs
-  const [input, setInput] = useState('');
+  const [input, setInput] = useState(searchParams.get("search") || "");
 
   // DuckDB stuff
   const [, setVersion] = useState(null);
@@ -31,7 +38,6 @@ function App() {
   }, []);
 
   const connectAndGetVersion = async () => {
-    setState({...state, ready: false});
     const version = await client.version();
     const db = await client.db();
     setVersion(version);
@@ -40,8 +46,28 @@ function App() {
     await client.query("INSTALL fts;");
     await client.query("LOAD fts;");
     await client.query("PRAGMA create_fts_index('segments', 'row_id', 'text', overwrite=1)");
-    setState({loading: false, ready: true});
+    setInitialized(true);
   }
+
+  useEffect(() => {
+    if (initialized && input) {
+      search();
+    }
+  // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [initialized]);
+
+  useEffect(() => {
+    if (selectedVideo) {
+      setSearchParams({...Object.fromEntries(searchParams.entries()), videoId: selectedVideo.id});
+    }
+  }, [selectedVideo, searchParams, setSearchParams]);
+
+  useEffect(() => {
+    const videoId = searchParams.get("videoId");
+    if (videoId) {
+      setSelectedVideo(videos[videoId]);
+    }
+  }, [videos, searchParams]);
 
   useEffect(() => {
     connectAndGetVersion();
@@ -50,7 +76,7 @@ function App() {
 
   const search = async () => {
     setMode(SEARCH_MODE);
-    setState({...state, ready: false});
+    setRunning(true);
     const results = await client.query(`
       WITH raw_events AS (
         SELECT
@@ -97,7 +123,8 @@ function App() {
       ORDER BY nb DESC
     `);
     setQueryResults(results);
-    setState({...state, ready: true});
+    setRunning(false);
+    setSearchParams({...Object.fromEntries(searchParams.entries()), search: input});
   }
 
   const handleHighlightsCreation = (highlight) => {
@@ -105,6 +132,8 @@ function App() {
     setHighlights({...highlights, [highlight.video_id]: [...previousValue, highlight]});
     window.localStorage.setItem("highlights", JSON.stringify({...highlights, [highlight.video_id]: [...previousValue, highlight]}));
   }
+
+  console.log("redraw")
 
   return (
     <div className="App">
@@ -116,19 +145,19 @@ function App() {
       <div className="content">
         <div className="left">
           <p>Watch highlights and search terms among the 80 <a href="https://www.datacouncil.ai/">Data Council 2024</a> videos.</p>
-          {!state.loading ?
+          {initialized ?
             <div className="search">
               <input
                 type="text"
                 value={input}
                 placeholder={"Search for a concept"}
-                disabled={state.ready ? '' : 'disabled'}
+                disabled={running ? 'disabled' : ''}
                 onChange={(e) => setInput(e.target.value)}
                 onKeyDown={(e) => {if (e.key === 'Enter') search()}}
               />
               <input
                 type="button"
-                disabled={state.ready ? '' : 'disabled'}
+                disabled={running ? 'disabled' : ''}
                 onClick={search}
                 value="search"
               />
@@ -136,7 +165,7 @@ function App() {
                 <span style={{marginRight: '10px'}}>
                   •
                 </span>
-                <input type="button" className="noMargin" disabled={state.ready ? '' : 'disabled'} onClick={() => setMode(HIGHLIGHTS_MODE)} value="watch highlights"/>
+                <input type="button" className="noMargin" disabled={running ? 'disabled' : ''} onClick={() => setMode(HIGHLIGHTS_MODE)} value="watch highlights"/>
               </div>
             </div>
             : ''}
@@ -169,13 +198,13 @@ function App() {
           </div>
         </div>
         <div className="right">
-          <div className="summary">🤔 In this app you can search for concepts or watch highlights we handpicked in the 80 data councils videos. Data Council highlights is an application designed and developed by <a href="https://blef.fr">blef</a> and <a href="https://juhache.substack.com">juhache</a>. This is not affiliated to the Data Council.</div>
-          {state.loading ? "App is initializing..." : ""}
+          <div className="summary">🤔 In this app you can search for concepts or watch highlights we handpicked in the 80 Data Council 2024 videos. Data Council highlights is an application designed and developed by <a href="https://blef.fr">blef</a> and <a href="https://juhache.substack.com">juhache</a>. This is not affiliated to the Data Council.</div>
+          {!initialized ? "App is initializing..." : ""}
           <div className="player" style={{display: `${selectedVideo ? 'block' : 'none'}`}}>
             {
-              selectedVideo ?
+              initialized && selectedVideo ?
                 <Player
-                  key={`player-${selectedVideo.id}`}
+                  key="player"
                   video={selectedVideo}
                   segments={queryResults.values ? queryResults.values.find((item) => item.video_id === selectedVideo.id) : []}
                   mode={mode}
