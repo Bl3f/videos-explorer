@@ -1,17 +1,17 @@
 {
   "files": {
-    "main.css": "https://www.qrators.io/datacouncil/static/css/main.e6c81222.css",
-    "main.js": "https://www.qrators.io/datacouncil/static/js/main.f007751f.js",
-    "reactPlayerPreview.js": "https://www.qrators.io/datacouncil/static/js/reactPlayerPreview.93aa36b5.chunk.js",
-    "static/js/453.fe35fe43.chunk.js": "https://www.qrators.io/datacouncil/static/js/453.fe35fe43.chunk.js",
-    "index.html": "https://www.qrators.io/datacouncil/index.html",
-    "main.e6c81222.css.map": "https://www.qrators.io/datacouncil/static/css/main.e6c81222.css.map",
-    "main.f007751f.js.map": "https://www.qrators.io/datacouncil/static/js/main.f007751f.js.map",
-    "reactPlayerPreview.93aa36b5.chunk.js.map": "https://www.qrators.io/datacouncil/static/js/reactPlayerPreview.93aa36b5.chunk.js.map",
-    "453.fe35fe43.chunk.js.map": "https://www.qrators.io/datacouncil/static/js/453.fe35fe43.chunk.js.map"
+    "main.css": "https://www.qrators.io/static/css/main.e6c81222.css",
+    "main.js": "https://www.qrators.io/static/js/main.bf93622a.js",
+    "reactPlayerPreview.js": "https://www.qrators.io/static/js/reactPlayerPreview.93aa36b5.chunk.js",
+    "static/js/453.fe35fe43.chunk.js": "https://www.qrators.io/static/js/453.fe35fe43.chunk.js",
+    "index.html": "https://www.qrators.io/index.html",
+    "main.e6c81222.css.map": "https://www.qrators.io/static/css/main.e6c81222.css.map",
+    "main.bf93622a.js.map": "https://www.qrators.io/static/js/main.bf93622a.js.map",
+    "reactPlayerPreview.93aa36b5.chunk.js.map": "https://www.qrators.io/static/js/reactPlayerPreview.93aa36b5.chunk.js.map",
+    "453.fe35fe43.chunk.js.map": "https://www.qrators.io/static/js/453.fe35fe43.chunk.js.map"
   },
   "entrypoints": [
     "static/css/main.e6c81222.css",
-    "static/js/main.f007751f.js"
+    "static/js/main.bf93622a.js"
   ]
 }
