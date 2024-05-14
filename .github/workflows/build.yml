@@ -20,7 +20,7 @@ jobs:
       - run: npm install --include dev
       - run: npm run build
         env:
-          PUBLIC_URL: "https://www.qrators.io/datacouncil"
+          PUBLIC_URL: "https://www.qrators.io"
       - name: Deploy
         uses: peaceiris/actions-gh-pages@v4
         with:
