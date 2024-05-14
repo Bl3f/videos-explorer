@@ -1,0 +1,241 @@
+{
+  "TrmJilG4GXk": [
+    {
+      "start": 110,
+      "end": 128,
+      "description": "An interesting issue about Snowflake: it's impossible to predict the cost.",
+      "video_id": "TrmJilG4GXk"
+    },
+    {
+      "start": 110,
+      "end": 128,
+      "description": "An interesting issue about Snowflake: it's impossible to predict the cost.",
+      "video_id": "TrmJilG4GXk"
+    },
+    {
+      "start": 110,
+      "end": 128,
+      "description": "An interesting issue about Snowflake: it's impossible to predict how much it will cost you !",
+      "video_id": "TrmJilG4GXk"
+    },
+    {
+      "start": 110,
+      "end": 128,
+      "description": "An interesting issue about Snowflake: it's impossible to predict how much it will cost you !",
+      "video_id": "TrmJilG4GXk"
+    },
+    {
+      "start": 110,
+      "end": 128,
+      "description": "Snowflake limitation: it's impossible to know how much it will cost you before running it. ",
+      "video_id": "TrmJilG4GXk"
+    },
+    {
+      "start": 110,
+      "end": 152,
+      "description": "Snowflake limitation: low latency ingestion means massive overprovisioning of the warehouse.",
+      "video_id": "TrmJilG4GXk"
+    },
+    {
+      "start": 269,
+      "end": 293,
+      "description": "multi-engine data stack: Lambda + Snowflake.",
+      "video_id": "TrmJilG4GXk"
+    },
+    {
+      "start": 316,
+      "end": 336,
+      "description": "Lambda + Duckdb = 🔥 it absorbs massive volume spikes without touching at the infra. ",
+      "video_id": "TrmJilG4GXk"
+    },
+    {
+      "start": 426,
+      "end": 444,
+      "description": "Limitation of lambda for data processing: resource is set at creation time and cannot be adjusted dynamically. ",
+      "video_id": "TrmJilG4GXk"
+    }
+  ],
+  "Sa3_yLzvUPY": [
+    {
+      "start": 25,
+      "end": 26,
+      "description": "Compute interoperability, such a revolution for the design of our data platforms ! ",
+      "video_id": "Sa3_yLzvUPY"
+    },
+    {
+      "start": 203,
+      "end": 212,
+      "description": "50% of Databricks users also use Snowflake :)",
+      "video_id": "Sa3_yLzvUPY"
+    },
+    {
+      "start": 203,
+      "end": 212,
+      "description": "50% of Databricks users also use Snowflake :)",
+      "video_id": "Sa3_yLzvUPY"
+    },
+    {
+      "start": 50,
+      "end": 61,
+      "description": "Open Table formats diverge !",
+      "video_id": "Sa3_yLzvUPY"
+    }
+  ],
+  "8XP25nQ2rPY": [
+    {
+      "start": 61,
+      "end": 77,
+      "description": "3 pillars of data productivity.",
+      "video_id": "8XP25nQ2rPY"
+    },
+    {
+      "start": 332,
+      "end": 335,
+      "description": "Virtual development environment for data = set of views pointing to the physical layer",
+      "video_id": "8XP25nQ2rPY"
+    },
+    {
+      "start": 86,
+      "end": 120,
+      "description": "What is a model ? ",
+      "video_id": "8XP25nQ2rPY"
+    },
+    {
+      "start": 212,
+      "end": 275,
+      "description": null,
+      "video_id": "8XP25nQ2rPY"
+    },
+    {
+      "start": 212,
+      "end": 275,
+      "description": null,
+      "video_id": "8XP25nQ2rPY"
+    },
+    { "start": 212, "end": 275, "description": null, "video_id": "8XP25nQ2rPY" }
+  ],
+  "9O2pfXkCDmU": [
+    {
+      "start": 176,
+      "end": 207,
+      "description": "Difference between AI data/workload and traditional systems optimized for tabular data. ",
+      "video_id": "9O2pfXkCDmU"
+    },
+    {
+      "start": 242,
+      "end": 270,
+      "description": "What is Lance format ? Columnar format optimized for data pipeline handling unstructured data.",
+      "video_id": "9O2pfXkCDmU"
+    },
+    {
+      "start": 346,
+      "end": 391,
+      "description": null,
+      "video_id": "9O2pfXkCDmU"
+    },
+    { "start": 346, "end": 391, "description": null, "video_id": "9O2pfXkCDmU" }
+  ],
+  "cylAr9oUluI": [
+    {
+      "start": 232,
+      "end": 251,
+      "description": null,
+      "video_id": "cylAr9oUluI"
+    },
+    {
+      "start": 232,
+      "end": 251,
+      "description": null,
+      "video_id": "cylAr9oUluI"
+    },
+    { "start": 232, "end": 251, "description": null, "video_id": "cylAr9oUluI" }
+  ],
+  "LOhvpOFAlf4": [
+    {
+      "start": 136,
+      "end": 170,
+      "description": null,
+      "video_id": "LOhvpOFAlf4"
+    },
+    { "start": 232, "end": 253, "description": null, "video_id": "LOhvpOFAlf4" }
+  ],
+  "YYeTQJYvqjU": [
+    {
+      "start": 139,
+      "end": 147,
+      "description": null,
+      "video_id": "YYeTQJYvqjU"
+    },
+    {
+      "start": 208,
+      "end": 250,
+      "description": null,
+      "video_id": "YYeTQJYvqjU"
+    },
+    {
+      "start": 273,
+      "end": 348,
+      "description": "Impedance mismatch in data",
+      "video_id": "YYeTQJYvqjU"
+    },
+    {
+      "start": 389,
+      "end": 466,
+      "description": "Classical debugging workflow in data engineering.",
+      "video_id": "YYeTQJYvqjU"
+    }
+  ],
+  "I-Z7kFGsYRI": [
+    {
+      "start": 343,
+      "end": 427,
+      "description": null,
+      "video_id": "I-Z7kFGsYRI"
+    },
+    {
+      "start": 343,
+      "end": 427,
+      "description": "How does parquet work?",
+      "video_id": "I-Z7kFGsYRI"
+    },
+    {
+      "start": 343,
+      "end": 427,
+      "description": "How does parquet work?",
+      "video_id": "I-Z7kFGsYRI"
+    }
+  ],
+  "qpJ5izI7vKQ": [
+    { "start": 342, "end": 363, "description": null, "video_id": "qpJ5izI7vKQ" }
+  ],
+  "obfI1Dv9U9w": [
+    { "start": 157, "end": 195, "description": null, "video_id": "obfI1Dv9U9w" }
+  ],
+  "N2UWHvY4CL8": [
+    { "start": 64, "end": 76, "description": null, "video_id": "N2UWHvY4CL8" },
+    { "start": 77, "end": 91, "description": null, "video_id": "N2UWHvY4CL8" }
+  ],
+  "rF8xmWNxM6I": [
+    {
+      "start": 610,
+      "end": 640,
+      "description": null,
+      "video_id": "rF8xmWNxM6I"
+    },
+    {
+      "start": 280,
+      "end": 323,
+      "description": "Defense strategies when deploying AI products",
+      "video_id": "rF8xmWNxM6I"
+    }
+  ],
+  "aAYa-XN2mUk": [
+    {
+      "start": 283,
+      "end": 304,
+      "description": null,
+      "video_id": "aAYa-XN2mUk"
+    },
+    { "start": 317, "end": 332, "description": null, "video_id": "aAYa-XN2mUk" }
+  ]
+}
