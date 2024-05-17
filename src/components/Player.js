@@ -24,12 +24,13 @@ function fancyTimeFormat(duration) {
 
 function Player(props) {
   const { video, segments, mode, setHighlights, highlights, prout=null } = props;
-  console.log(segments);
   const savedPlayerConfig = window.localStorage.getItem("playerConfig") ? JSON.parse(window.localStorage.getItem("playerConfig")) : {"volume": 0.8, "playbackRate": 1};
 
   const [transcript, setTranscript] = React.useState({segments: []});
   const [currentSegment, setCurrentSegment] = React.useState({});
   const [currentHightlightCreation, setCurrentHightlightCreation] = React.useState({start: null, end: null, description: null, video_id: video.id});
+  const [hovering, setHovering] = React.useState(false);
+  const [hoveringProgress, setHoveringProgress] = React.useState({position: 0, time: 0});
 
   const playerRef = React.useRef(null);
   const backgroundRef = React.useRef(null);
@@ -59,6 +60,16 @@ function Player(props) {
     }
     const segments = transcript.segments.filter((segment) => segment.start <= progress.playedSeconds && segment.end > progress.playedSeconds);
     return segments.length > 0 ? setCurrentSegment(segments[0]) : null;
+  }
+
+  const handleBackgroundHover = (e) => {
+    setHovering(true);
+    const target = e.target;
+    const rect = target.getBoundingClientRect();
+    const x = e.clientX - rect.left;
+    const percentage = x / rect.width;
+    const seconds = duration * percentage;
+    setHoveringProgress({position: x - 7, time: fancyTimeFormat(seconds)});
   }
 
   const handleSeek = (e) => {
@@ -115,13 +126,12 @@ function Player(props) {
       </div>
       <div className="controls">
         <div className="timeline">
-          <div ref={backgroundRef} className="background" onClick={handleSeek} onMouseMove={(e) => {}}></div>
+          <div className={`timelineHover ${hovering ? 'visible' : ''}`} style={{left: hoveringProgress.position}}><div className="node"></div><div className="text">{hoveringProgress.time}</div></div>
+          <div ref={backgroundRef} className="background" onClick={handleSeek} onMouseMove={handleBackgroundHover} onMouseLeave={() => setHovering(false)}></div>
           <div className="firstground" style={{width: `${progress.played * 100}%`}}></div>
           {segments ? toArray(segments.sessions).map((session, i) => {
-            console.log(session);
             if (backgroundRef.current) {
               const width = backgroundRef.current.getBoundingClientRect().width;
-              console.log(width)
               const start = session.start * width / duration;
               const end = session.end * width / duration;
 
