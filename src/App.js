@@ -28,13 +28,18 @@ function App() {
   const [client] = useState(new DuckDBClient());
 
   //Highlights main state
-  const [highlights, setHighlights] = useState(window.localStorage.getItem("highlights") ? JSON.parse(window.localStorage.getItem("highlights")) : {});
+  const [highlightsAdmin, setHighlightsAdmin] = useState(window.localStorage.getItem("highlights") ? JSON.parse(window.localStorage.getItem("highlights")) : {});
+  const [highlights, setHighlights] = useState({});
 
   useEffect(() => {
     fetch("https://storage.googleapis.com/videos-explorer/videos.json")
       .then((response) => response.json())
       .then((data) => Object.fromEntries((new Map(data.map((video) => [video.id, video])))))
       .then((data) => setVideos(data));
+
+    fetch("https://storage.googleapis.com/videos-explorer/highlights.v2.json")
+      .then((response) => response.json())
+      .then((data) => setHighlights(data));
   }, []);
 
   const connectAndGetVersion = async () => {
@@ -168,7 +173,7 @@ function App() {
       <h2 className="subtitle">Playlist — Data Council <span onClick={() => setMode(ADMIN_MODE)}  style={{color: ADMIN_MODE === mode ? "red": "var(--main-color)"}}>2024</span></h2>
       <div className="content">
         <div className="left">
-          {initialized && mode === SEARCH_MODE ?
+          {initialized ?
             <div className="summary">
               Search for a term or watch highlights 🤭 (e.g. {['Airflow', 'dbt', 'dlt', '"SQL Glot"'].map((w, i) => <span><span className="link" onClick={() => setAndSearch(w)}>{w}</span>{i !== 3 ? ', ' : ''}</span>)}.)
               <p>You can search for exact terms by using double quotes (case insensitive) or use the full text search without quotes.</p>
@@ -214,7 +219,7 @@ function App() {
                 </div>
               </div>
             ))}
-            {((mode === ADMIN_MODE) || (initialized && videos && input === '') ) && Object.entries(videos).map(([videoId, video]) => (
+            {((mode === ADMIN_MODE) || (mode === SEARCH_MODE && initialized && videos && input === '') ) && Object.entries(videos).map(([videoId, video]) => (
               <div
                 className={`video ${selectedVideo && selectedVideo.id === video.id ? 'selected' : ''}`}
                 key={video.id}
@@ -226,6 +231,21 @@ function App() {
                 </div>
               </div>
             ))}
+            {
+              mode === HIGHLIGHTS_MODE && Object.entries(highlights).map(([videoId, highlights]) => (
+                <div
+                  className={`video ${selectedVideo && selectedVideo.id === videoId ? 'selected' : ''}`}
+                  key={videoId}
+                  onClick={() => setSelectedVideo(videos[videoId])}
+                >
+                  <img src={videos[videoId].thumbnail} alt=""/>
+                  <div className="details">
+                    <div className="title">{videos[videoId].title}</div>
+                    <div>{highlights.length} highlights</div>
+                  </div>
+                </div>
+              ))
+            }
           </div>
         </div>
         <div className="right">
