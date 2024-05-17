@@ -40,7 +40,7 @@ function Player(props) {
   const [playbackRate, setplaybackRate] = React.useState(savedPlayerConfig.playbackRate);
   const [duration, setDuration] = React.useState('00:00');
   const [dynamicTitle, setDynamicTitle] = React.useState('');
-
+  console.log("redraw")
   //const currentSegment = transcript.segments && progress.playedSeconds ? transcript.segments.filter((segment) => segment.start <= progress.playedSeconds && segment.end > progress.playedSeconds)[0] : {};
 
   useEffect(() => {

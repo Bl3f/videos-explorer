@@ -31,6 +31,8 @@ function App() {
   const [highlightsAdmin, setHighlightsAdmin] = useState(window.localStorage.getItem("highlights") ? JSON.parse(window.localStorage.getItem("highlights")) : {});
   const [highlights, setHighlights] = useState({});
 
+  console.log("redraw")
+
   useEffect(() => {
     fetch("https://storage.googleapis.com/videos-explorer/videos.json")
       .then((response) => response.json())
@@ -159,9 +161,9 @@ function App() {
   }
 
   const handleHighlightsCreation = (highlight) => {
-    const previousValue = (highlight.video_id in highlights) ? highlights[highlight.video_id] : [];
-    setHighlights({...highlights, [highlight.video_id]: [...previousValue, highlight]});
-    window.localStorage.setItem("highlights", JSON.stringify({...highlights, [highlight.video_id]: [...previousValue, highlight]}));
+    const previousValue = (highlight.video_id in highlightsAdmin) ? highlightsAdmin[highlight.video_id] : [];
+    setHighlightsAdmin({...highlightsAdmin, [highlight.video_id]: [...previousValue, highlight]});
+    window.localStorage.setItem("highlights", JSON.stringify({...highlightsAdmin, [highlight.video_id]: [...previousValue, highlight]}));
   }
 
   return (
@@ -261,7 +263,7 @@ function App() {
                   segments={queryResults.values ? queryResults.values.find((item) => item.video_id === selectedVideo.id) : []}
                   mode={mode}
                   setHighlights={handleHighlightsCreation}
-                  highlights={highlights[selectedVideo.id]}
+                  highlights={highlights[selectedVideo.id].concat(highlightsAdmin[selectedVideo.id])}
                 />
                 : ""
             }
