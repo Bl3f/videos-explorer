@@ -263,7 +263,7 @@ function App() {
                   segments={queryResults.values ? queryResults.values.find((item) => item.video_id === selectedVideo.id) : []}
                   mode={mode}
                   setHighlights={handleHighlightsCreation}
-                  highlights={highlights[selectedVideo.id].concat(highlightsAdmin[selectedVideo.id])}
+                  highlights={(highlights[selectedVideo.id] || []).concat(highlightsAdmin[selectedVideo.id] || [])}
                 />
                 : ""
             }
