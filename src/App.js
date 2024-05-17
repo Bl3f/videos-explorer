@@ -163,9 +163,9 @@ function App() {
     <div className="App">
       <header>
         <h1>QRATORS<div className="borderLogo"></div></h1>
-        <button className="noMargin" onClick={() => setMode(ADMIN_MODE)} style={{background: ADMIN_MODE === mode ? "red": "var(--main-color)"}}>Admin mode</button>
+        <button className="noMargin"><a href="https://forms.gle/BuQbGvhcCVhL8CUg6" target="_blank" rel="noopener noreferrer">Stay updated</a></button>
       </header>
-      <h2 className="subtitle">Playlist — Data Council 2024</h2>
+      <h2 className="subtitle">Playlist — Data Council <span onClick={() => setMode(ADMIN_MODE)}  style={{color: ADMIN_MODE === mode ? "red": "var(--main-color)"}}>2024</span></h2>
       <div className="content">
         <div className="left">
           {initialized && mode === SEARCH_MODE ?
