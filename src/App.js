@@ -74,11 +74,25 @@ function App() {
   // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
-  const search = async () => {
+  const setAndSearch = (term) => {
+    setInput(term);
+    search(term);
+  }
+
+  const search = async (term=null) => {
+    const searchTerm = term || input;
+    const FTS = 'fts';
+    const CONTAINS = 'contains';
+    let mode = FTS;
+
+    if (searchTerm.startsWith('"') && searchTerm.endsWith('"')) {
+      mode = CONTAINS;
+    }
+
     setMode(SEARCH_MODE);
     setRunning(true);
     const results = await client.query(`
-      WITH raw_events AS (
+      WITH raw_events_fts AS (
         SELECT
           video_id,
           id, 
@@ -90,12 +104,24 @@ function App() {
         FROM (
           SELECT *, fts_main_segments.match_bm25(
             row_id, 
-            '${input}'
+            '${searchTerm}'
           ) AS score FROM segments
         ) sq 
         WHERE
           score is not null AND score > 2
         ORDER BY video_id, id
+      ),
+          
+      raw_events_contains AS (
+          SELECT
+            video_id,
+            id, 
+            text,
+            start,
+            "end",
+            COALESCE(CAST((LEAD(id, -1) OVER (PARTITION BY video_id ORDER BY id ASC) - id < -15) AS INT), 0) AS is_not_same_session,
+          FROM segments
+          WHERE contains(lower(text), lower('${searchTerm.slice(1, -1)}'))
       ),
       
       sessions AS (
@@ -105,7 +131,7 @@ function App() {
           start,
           "end",
           SUM(is_not_same_session) OVER (PARTITION BY video_id ORDER BY id ASC) AS session_id
-        FROM raw_events
+        FROM raw_events_${mode}
       ),
       
       sessions_details AS (
@@ -124,7 +150,7 @@ function App() {
     `);
     setQueryResults(results);
     setRunning(false);
-    setSearchParams({...Object.fromEntries(searchParams.entries()), search: input});
+    setSearchParams({...Object.fromEntries(searchParams.entries()), search: searchTerm});
   }
 
   const handleHighlightsCreation = (highlight) => {
@@ -136,13 +162,19 @@ function App() {
   return (
     <div className="App">
       <header>
-        <h1>✨ Highlights</h1>
+        <h1>QRATORS<div className="borderLogo"></div></h1>
         <button className="noMargin" onClick={() => setMode(ADMIN_MODE)} style={{background: ADMIN_MODE === mode ? "red": "var(--main-color)"}}>Admin mode</button>
       </header>
-      <h2 className="subtitle">Data Council 2024 playlist</h2>
+      <h2 className="subtitle">Playlist — Data Council 2024</h2>
       <div className="content">
         <div className="left">
-          <p>Watch highlights and search terms among the 80 <a href="https://www.datacouncil.ai/">Data Council 2024</a> videos.</p>
+          {initialized && mode === SEARCH_MODE ?
+            <div className="summary">
+              Search for a term or watch highlights 🤭 (e.g. {['Airflow', 'dbt', 'dlt', '"SQL Glot"'].map((w, i) => <span><span className="link" onClick={() => setAndSearch(w)}>{w}</span>{i !== 3 ? ', ' : ''}</span>)}.)
+              <p>You can search for exact terms by using double quotes (case insensitive) or use the full text search without quotes.</p>
+              <p>Only works on Desktop yet, if you want it on mobile please reach out to us.</p>
+            </div>
+            : ""}
           {initialized ?
             <div className="search">
               <input
@@ -168,7 +200,7 @@ function App() {
             </div>
             : ''}
           <div className="results">
-            {initialized && mode === SEARCH_MODE && input === "" ? <div className="summary">Search for a term or watch highlights 🤭</div> : ""}
+            {initialized ? <div className="hint">{input === '' ? `${Object.entries(videos).length} videos` : <span>{queryResults.values.length} results {queryResults.values.length === 0 ? "(Don't forget to press Enter or click search)" : ''}</span>}</div> : ''}
             {mode === SEARCH_MODE && queryResults.values.map((result) => (
               <div
                 className={`video ${selectedVideo && selectedVideo.id === result.video_id ? 'selected' : ''}`}
@@ -182,7 +214,7 @@ function App() {
                 </div>
               </div>
             ))}
-            {mode === ADMIN_MODE && Object.entries(videos).map(([videoId, video]) => (
+            {((mode === ADMIN_MODE) || (initialized && videos && input === '') ) && Object.entries(videos).map(([videoId, video]) => (
               <div
                 className={`video ${selectedVideo && selectedVideo.id === video.id ? 'selected' : ''}`}
                 key={video.id}
@@ -197,7 +229,8 @@ function App() {
           </div>
         </div>
         <div className="right">
-          <div className="summary">🤔 In this app you can search for concepts or watch highlights we handpicked in the 80 Data Council 2024 videos. Data Council highlights is an application designed and developed by <a href="https://blef.fr">blef</a> and <a href="https://juhache.substack.com">juhache</a>. This is not affiliated to the Data Council.</div>
+          <div className="summary">🤔 In this app you can search for concepts or watch highlights we handpicked in the 80 Data Council 2024 videos. Data Council highlights is an application designed and developed by <a href="https://blef.fr">blef</a> and <a href="https://juhache.substack.com">juhache</a>. This is not affiliated to the <a
+            href="https://www.datacouncil.ai/">Data Council</a>.</div>
           {!initialized ? "App is initializing..." : ""}
           <div className="player" style={{display: `${selectedVideo ? 'block' : 'none'}`}}>
             {

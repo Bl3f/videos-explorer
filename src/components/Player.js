@@ -23,7 +23,8 @@ function fancyTimeFormat(duration) {
 }
 
 function Player(props) {
-  const { video, segments, mode, setHighlights, highlights } = props;
+  const { video, segments, mode, setHighlights, highlights, prout=null } = props;
+  console.log(segments);
   const savedPlayerConfig = window.localStorage.getItem("playerConfig") ? JSON.parse(window.localStorage.getItem("playerConfig")) : {"volume": 0.8, "playbackRate": 1};
 
   const [transcript, setTranscript] = React.useState({segments: []});
@@ -42,9 +43,13 @@ function Player(props) {
   //const currentSegment = transcript.segments && progress.playedSeconds ? transcript.segments.filter((segment) => segment.start <= progress.playedSeconds && segment.end > progress.playedSeconds)[0] : {};
 
   useEffect(() => {
-    fetch(`https://storage.googleapis.com/videos-explorer/${video.id}.json`)
-      .then((response) => response.json())
-      .then((data) => setTranscript(data));
+    if (prout) {
+      return;
+    } else {
+      fetch(`https://storage.googleapis.com/videos-explorer/${video.id}.json`)
+        .then((response) => response.json())
+        .then((data) => setTranscript(data));
+    }
   // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
@@ -113,8 +118,10 @@ function Player(props) {
           <div ref={backgroundRef} className="background" onClick={handleSeek} onMouseMove={(e) => {}}></div>
           <div className="firstground" style={{width: `${progress.played * 100}%`}}></div>
           {segments ? toArray(segments.sessions).map((session, i) => {
+            console.log(session);
             if (backgroundRef.current) {
               const width = backgroundRef.current.getBoundingClientRect().width;
+              console.log(width)
               const start = session.start * width / duration;
               const end = session.end * width / duration;
 

@@ -8,12 +8,14 @@ import {
   Routes,
   BrowserRouter,
 } from "react-router-dom";
+import Beta from "./Beta";
 
 const root = ReactDOM.createRoot(document.getElementById('root'));
 root.render(
   <React.StrictMode>
     <BrowserRouter>
       <Routes>
+        <Route path="/beta" element={<Beta />} />
         <Route path="*" element={<App />} />
       </Routes>
     </BrowserRouter>
