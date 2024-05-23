@@ -3,14 +3,14 @@ import {useEffect, useState} from "react";
 import Player from "./components/Player";
 import DuckDBClient from "./utils/DuckDB";
 import {ADMIN_MODE, HIGHLIGHTS_MODE, SEARCH_MODE} from "./consts";
-import {useSearchParams} from "react-router-dom";
+import {useParams, useSearchParams} from "react-router-dom";
 
 
 function App() {
   // available searchParams possible
   // search term, videoId
+  const { source } = useParams();
   const [searchParams, setSearchParams] = useSearchParams();
-
 
   const [mode, setMode] = useState(SEARCH_MODE);
   const [videos, setVideos] = useState({});
@@ -34,22 +34,22 @@ function App() {
   console.log("redraw")
 
   useEffect(() => {
-    fetch("https://storage.googleapis.com/videos-explorer/videos.json")
+    fetch(`https://storage.googleapis.com/videos-explorer/${source}/videos.json?ignoreCache=1`)
       .then((response) => response.json())
       .then((data) => Object.fromEntries((new Map(data.map((video) => [video.id, video])))))
       .then((data) => setVideos(data));
 
-    fetch("https://storage.googleapis.com/videos-explorer/highlights.v2.json")
+    fetch(`https://storage.googleapis.com/videos-explorer/${source}/highlights.v2.json`)
       .then((response) => response.json())
       .then((data) => setHighlights(data));
-  }, []);
+  }, [source]);
 
   const connectAndGetVersion = async () => {
     const version = await client.version();
     const db = await client.db();
     setVersion(version);
     setDB(db);
-    await client.query(`CREATE TABLE IF NOT EXISTS segments AS (SELECT video_id, id, row_id, start, "end", text FROM read_parquet('https://storage.googleapis.com/videos-explorer/segments.parquet'));`)
+    await client.query(`CREATE TABLE IF NOT EXISTS segments AS (SELECT video_id, id, row_id, start, "end", text FROM read_parquet('https://storage.googleapis.com/videos-explorer/${source}/segments.parquet'));`)
     await client.query("INSTALL fts;");
     await client.query("LOAD fts;");
     await client.query("PRAGMA create_fts_index('segments', 'row_id', 'text', overwrite=1)");

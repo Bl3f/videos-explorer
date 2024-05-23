@@ -2,6 +2,7 @@ import React, {useEffect} from "react";
 import ReactPlayer from 'react-player/youtube';
 import { FaPause, FaPlay } from "react-icons/fa";
 import {ADMIN_MODE, HIGHLIGHTS_OFFSET} from "../consts";
+import {useParams} from "react-router-dom";
 
 function fancyTimeFormat(duration) {
   // Hours, minutes and seconds
@@ -23,6 +24,7 @@ function fancyTimeFormat(duration) {
 }
 
 function Player(props) {
+  const { source } = useParams();
   const { video, segments, mode, setHighlights, highlights, prout=null } = props;
   const savedPlayerConfig = window.localStorage.getItem("playerConfig") ? JSON.parse(window.localStorage.getItem("playerConfig")) : {"volume": 0.8, "playbackRate": 1};
 
@@ -47,7 +49,7 @@ function Player(props) {
     if (prout) {
       return;
     } else {
-      fetch(`https://storage.googleapis.com/videos-explorer/${video.id}.json`)
+      fetch(`https://storage.googleapis.com/videos-explorer/${source}/${video.id}.json`)
         .then((response) => response.json())
         .then((data) => setTranscript(data));
     }

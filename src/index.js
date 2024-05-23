@@ -7,6 +7,7 @@ import {
   Route,
   Routes,
   BrowserRouter,
+  Navigate,
 } from "react-router-dom";
 
 const root = ReactDOM.createRoot(document.getElementById('root'));
@@ -14,7 +15,8 @@ root.render(
   <React.StrictMode>
     <BrowserRouter>
       <Routes>
-        <Route path="*" element={<App />} />
+        <Route path="/" element={<Navigate to="/datacouncil" replace />} />
+        <Route path="/:source" element={<App />} />
       </Routes>
     </BrowserRouter>
   </React.StrictMode>
