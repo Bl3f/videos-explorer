@@ -1,17 +1,17 @@
 {
   "files": {
     "main.css": "https://www.qrators.io/static/css/main.71df6651.css",
-    "main.js": "https://www.qrators.io/static/js/main.57688951.js",
+    "main.js": "https://www.qrators.io/static/js/main.f55c6148.js",
     "reactPlayerPreview.js": "https://www.qrators.io/static/js/reactPlayerPreview.93aa36b5.chunk.js",
     "static/js/453.fe35fe43.chunk.js": "https://www.qrators.io/static/js/453.fe35fe43.chunk.js",
     "index.html": "https://www.qrators.io/index.html",
     "main.71df6651.css.map": "https://www.qrators.io/static/css/main.71df6651.css.map",
-    "main.57688951.js.map": "https://www.qrators.io/static/js/main.57688951.js.map",
+    "main.f55c6148.js.map": "https://www.qrators.io/static/js/main.f55c6148.js.map",
     "reactPlayerPreview.93aa36b5.chunk.js.map": "https://www.qrators.io/static/js/reactPlayerPreview.93aa36b5.chunk.js.map",
     "453.fe35fe43.chunk.js.map": "https://www.qrators.io/static/js/453.fe35fe43.chunk.js.map"
   },
   "entrypoints": [
     "static/css/main.71df6651.css",
-    "static/js/main.57688951.js"
+    "static/js/main.f55c6148.js"
   ]
 }
