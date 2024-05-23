@@ -8,14 +8,29 @@ import {
   Routes,
   BrowserRouter,
   Navigate,
+  useLocation,
 } from "react-router-dom";
+
+const PreserveQueryNavigate = () => {
+  const location = useLocation();
+
+  // Get the search parameters from the current location
+  const searchParams = location.search;
+
+  // Construct the new path with the existing query parameters
+  const newPath = `/datacouncil${searchParams}`;
+
+  return <Navigate to={newPath} replace />;
+};
+
+export default PreserveQueryNavigate;
 
 const root = ReactDOM.createRoot(document.getElementById('root'));
 root.render(
   <React.StrictMode>
     <BrowserRouter>
       <Routes>
-        <Route path="/" element={<Navigate to="/datacouncil" replace />} />
+        <Route path="/" element={<PreserveQueryNavigate />} />
         <Route path="/:source" element={<App />} />
       </Routes>
     </BrowserRouter>
